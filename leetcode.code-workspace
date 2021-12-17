@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": ".leetcode",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"xstring": "cpp",
+			"iosfwd": "cpp",
+			"vector": "cpp"
+		}
+	}
+}
