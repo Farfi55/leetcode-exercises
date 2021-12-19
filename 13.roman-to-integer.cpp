@@ -14,28 +14,25 @@ using namespace std;
 class Solution {
 public:
 	int romanToInt(string s) {
-		std::map<char, int> romans_symbol_index = {
-			{'I',0},
-			{'V',1},
-			{'X',2},
-			{'L',3},
-			{'C',4},
-			{'D',5},
-			{'M',6}
-		};
+		uint8_t romans_symbol_index['X' - 'C' + 1] = { 0 };
+
+		romans_symbol_index['I' - 'C'] = 0; // I
+		romans_symbol_index['V' - 'C'] = 1; // V
+		romans_symbol_index['X' - 'C'] = 2; // X
+		romans_symbol_index['L' - 'C'] = 3; // L
+		romans_symbol_index['C' - 'C'] = 4; // C
+		romans_symbol_index['D' - 'C'] = 5; // D
+		romans_symbol_index['M' - 'C'] = 6; // M
 
 
 
-		int roman_values[7] = { 1, 5, 10, 50, 100, 500, 1000 };
+		const uint16_t roman_values[7] = { 1, 5, 10, 50, 100, 500, 1000 };
+		uint16_t sum = 0;
 
-
-		int sum = 0;
-
-
-		for(int i = 0; i < s.size(); i++) {
+		for(uint8_t i = 0; i < s.size(); i++) {
 			const char symbol = s[i];
-			const int symbol_index = romans_symbol_index[symbol];
-			const int value = roman_values[symbol_index];
+			const uint8_t symbol_index = romans_symbol_index[symbol - 'C'];
+			const uint16_t value = roman_values[symbol_index];
 
 			if(i == s.size() - 1) {
 				sum += value;
@@ -43,7 +40,7 @@ public:
 			}
 
 			if(symbol_index % 2 == 0) {
-				const int next_symbol_index = romans_symbol_index[s[i + 1]];
+				const uint8_t next_symbol_index = romans_symbol_index[s[i + 1] - 'C'];
 
 				if(next_symbol_index - symbol_index == 2 ||
 					next_symbol_index - symbol_index == 1) {
