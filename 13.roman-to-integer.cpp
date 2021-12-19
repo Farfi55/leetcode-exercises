@@ -14,65 +14,45 @@ using namespace std;
 class Solution {
 public:
 	int romanToInt(string s) {
-		std::map<char, int> romans_symbol_value = {
-			{'I',1},
-			{'V',5},
-			{'X',10},
-			{'L',50},
-			{'C',100},
-			{'D',500},
-			{'M',1000}
+		std::map<char, int> romans_symbol_index = {
+			{'I',0},
+			{'V',1},
+			{'X',2},
+			{'L',3},
+			{'C',4},
+			{'D',5},
+			{'M',6}
 		};
+
+
+
+		int roman_values[7] = { 1, 5, 10, 50, 100, 500, 1000 };
+
 
 		int sum = 0;
 
 
 		for(int i = 0; i < s.size(); i++) {
-			char symbol = s[i];
+			const char symbol = s[i];
+			const int symbol_index = romans_symbol_index[symbol];
+			const int value = roman_values[symbol_index];
 
 			if(i == s.size() - 1) {
-				sum += romans_symbol_value[symbol];
+				sum += value;
 				break;
 			}
 
-			if(symbol == 'I') {
-				if(s[i + 1] == 'V') {
-					sum += 4;
-					i++;
-					continue;
-				}
-				else if(s[i + 1] == 'X') {
-					sum += 9;
-					i++;
-					continue;
-				}
-			}
-			else if(symbol == 'X') {
-				if(s[i + 1] == 'L') {
-					sum += 40;
-					i++;
-					continue;
-				}
-				else if(s[i + 1] == 'C') {
-					sum += 90;
-					i++;
-					continue;
-				}
-			}
-			else if(symbol == 'C') {
-				if(s[i + 1] == 'D') {
-					sum += 400;
-					i++;
-					continue;
-				}
-				else if(s[i + 1] == 'M') {
-					sum += 900;
-					i++;
-					continue;
-				}
-			}
-			sum += romans_symbol_value[symbol];
+			if(symbol_index % 2 == 0) {
+				const int next_symbol_index = romans_symbol_index[s[i + 1]];
 
+				if(next_symbol_index - symbol_index == 2 ||
+					next_symbol_index - symbol_index == 1) {
+					sum += roman_values[next_symbol_index] - value;
+					i++;
+				}
+				else sum += value;
+			}
+			else sum += value;
 		}
 
 		return sum;
