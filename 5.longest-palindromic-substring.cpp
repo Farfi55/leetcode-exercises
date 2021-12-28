@@ -22,7 +22,7 @@ public:
 		int size = 0;
 
 
-		for(int i = 0; i < n; i++) {
+		for(int i = 0; (n - i) * 2 > size; i++) {
 			int len1 = expandFromMiddle(i, i, s);
 			int len2 = expandFromMiddle(i, i + 1, s);
 			int len = max(len1, len2);
