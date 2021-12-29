@@ -15,6 +15,7 @@ struct ListNode {
 	ListNode(int x, ListNode* next) : val(x), next(next) {}
 
 };
+
 // @lc code=start
 /**
  * Definition for singly-linked list.
@@ -46,16 +47,11 @@ public:
 		}
 
 
-		while(list1) {
-			list->next = new ListNode(list1->val);
-			list1 = list1->next;
-			list = list->next;
+		if(list1) {
+			list->next = list1;
 		}
-
-		while(list2) {
-			list->next = new ListNode(list2->val);
-			list2 = list2->next;
-			list = list->next;
+		else if(list2) {
+			list->next = list2;
 		}
 
 		return list_start->next;
@@ -63,39 +59,39 @@ public:
 };
 // @lc code=end
 
-int main(int argc, char const* argv[])
-{
-	Solution sol;
-	int x;
-	cin >> x;
-	ListNode* l1;
-	ListNode* l1_curr = l1;
-	ListNode* l2;
-	ListNode* l2_curr = l2;
-	while(x != -1) {
-		l1_curr->next = new ListNode(x);
-		l1_curr = l1_curr->next;
-		cin >> x;
-	}
-	cin >> x;
-	while(x != -1) {
-		l2_curr->next = new ListNode(x);
-		l2_curr = l2_curr->next;
-		cin >> x;
-	}
+// int main(int argc, char const* argv[])
+// {
+// 	Solution sol;
+// 	int x;
+// 	cin >> x;
+// 	ListNode* l1;
+// 	ListNode* l1_curr = l1;
+// 	ListNode* l2;
+// 	ListNode* l2_curr = l2;
+// 	while(x != -1) {
+// 		l1_curr->next = new ListNode(x);
+// 		l1_curr = l1_curr->next;
+// 		cin >> x;
+// 	}
+// 	cin >> x;
+// 	while(x != -1) {
+// 		l2_curr->next = new ListNode(x);
+// 		l2_curr = l2_curr->next;
+// 		cin >> x;
+// 	}
 
 
-	ListNode* out = sol.mergeTwoLists(l1->next, l2->next);
+// 	ListNode* out = sol.mergeTwoLists(l1->next, l2->next);
 
-	cout << out->val << " ";
+// 	cout << out->val << " ";
 
-	while(out->next) {
-		out = out->next;
-		cout << out->val << " ";
-	}
+// 	while(out->next) {
+// 		out = out->next;
+// 		cout << out->val << " ";
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
 
 
 
