@@ -7,39 +7,37 @@
 
 using namespace std;
 // @lc code=start
+
 class Solution {
 public:
 
-	bool canAdd(int row, int col, vector<bool>& cols, vector<bool>& main, vector<bool>& anti) {
-		return cols[col] && main[row + col] && anti[row + cols.size() - 1 - col];
-	}
+	vector<int> board;
+	int solutions = 0;
 
-	void solve(int n, int row, vector<int>& board, int& solutions,
-		vector<bool>& cols, vector<bool>& main, vector<bool>& anti) {
-		if(row == n) ++solutions;
-		else for(int col = 0; col < n; col++) {
-			if(canAdd(row, col, cols, main, anti)) {
-				board.push_back(col); // add to current solution
-				cols[col] = main[row + col] = anti[row + n - 1 - row] = false;
-
-				solve(n, row + 1, board, solutions, cols, main, anti);
-
-				// remove from current solution
-				cols[col] = main[row + col] = anti[row + n - 1 - row] = true;
-				board.pop_back();
-			}
+	bool canAdd(int queen_col) {
+		int queen_row = board.size();
+		for(int i = 0; i < queen_row; i++) {
+			if(queen_col == board[i] || // same column
+				((queen_col - board[i]) == (queen_row - i)) || // same main diagonal
+				((queen_col - board[i]) == -(queen_row - i))) 	// same secondary diagonal 
+				return false;
 		}
+		return true;
+
 	}
 
 public:
 	int totalNQueens(int n) {
-		vector<int> board; board.reserve(n);
-		vector<bool> cols(n, true);
-		vector<bool> main(n * 2 - 1, true);
-		vector<bool> anti(n * 2 - 1, true);
-		int solutions = 0;
+		for(int col = 0; col < n; col++) {
+			if(canAdd(col)) {
+				board.push_back(col); // add to current solution
 
-		solve(n, 0, board, solutions, cols, main, anti);
+				if(board.size() == n) solutions++; // last queen
+				else totalNQueens(n);
+
+				board.pop_back(); // remove from current solution
+			}
+		}
 		return solutions;
 	}
 };
