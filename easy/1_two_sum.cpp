@@ -16,14 +16,11 @@ public:
 		const int n = nums.size();
 		unordered_map<int, int> hash_map;
 
-		for(int i = 0; i < n; i++)
-			hash_map[nums[i]] = i;
-
-
 		for(int i = 0; i < n; i++) {
 			int complement = target - nums[i];
-			if(hash_map.find(complement) != hash_map.end() && i != hash_map[complement])
+			if(hash_map.find(complement) != hash_map.end())
 				return vector<int>{ i, hash_map[complement] };
+			hash_map[nums[i]] = i;
 		}
 		return vector<int>{-1, -1};
 	}
