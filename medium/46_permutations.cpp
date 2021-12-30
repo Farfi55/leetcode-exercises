@@ -26,7 +26,6 @@ class Solution {
 		}
 	}
 
-
 public:
 	vector<vector<int>> permute(vector<int>& nums) {
 		vector<vector<int>> permutations;
