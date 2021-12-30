@@ -13,41 +13,38 @@ using namespace std;
 // @lc code=start
 class Solution {
 
-	vector<int> queens;
-	vector<vector<string>> solutions;
-
-	bool canAdd(int queen_col) {
-		int queen_row = queens.size();
-		for(int i = 0; i < queen_row; i++) {
-			if(queen_col == queens[i] || // same column
-				((queen_col - queens[i]) == (queen_row - i)) || // same main diagonal
-				((queen_col - queens[i]) == -(queen_row - i))) 	// same secondary diagonal 
-				return false;
-		}
+	bool canAdd(int row, int col, vector<string>& board) {
+		 // check col
+		for(int i = row; i >= 0; --i)
+			if(board[i][col] == 'Q') return false;
+		// check left diagonal
+		for(int i = row, j = col; i >= 0 && j >= 0; --i, --j)
+			if(board[i][j] == 'Q') return false;
+		//check right diagonal
+		for(int i = row, j = col; i >= 0 && j < board.size(); --i, ++j)
+			if(board[i][j] == 'Q') return false;
 		return true;
-
 	}
 
-	void addSolution(int n) {
-		vector<string> sol(n, string(n, '.'));
-		for(int i = 0; i < n; i++)
-			sol[i][queens[i]] = 'Q';
 
-		solutions.push_back(sol);
+	void solve(int n, int row, vector<string>& board, vector<vector<string>>& solutions) {
+		if(row == n)
+			solutions.push_back(board);
+		else for(int col = 0; col < n; col++) {
+			if(canAdd(row, col, board)) {
+				board[row][col] = 'Q'; // add to current solution
+				solve(n, row + 1, board, solutions);
+				board[row][col] = '.'; //  from current solution
+			}
+		}
 	}
 
 public:
 	vector<vector<string>> solveNQueens(int n) {
-		for(int col = 0; col < n; col++) {
-			if(canAdd(col)) {
-				queens.push_back(col); // add to current solution
 
-				if(queens.size() == n) addSolution(n); // last queen
-				else solveNQueens(n);
-
-				queens.pop_back(); // remove from current solution
-			}
-		}
+		vector<vector<string>> solutions;
+		vector<string> board(n, string(n, '.'));
+		solve(n, 0, board, solutions);
 		return solutions;
 	}
 
