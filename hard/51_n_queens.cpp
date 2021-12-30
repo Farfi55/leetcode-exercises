@@ -29,11 +29,10 @@ class Solution {
 	}
 
 	void addSolution(int n) {
-		vector<string> sol;
-		for(int i = 0; i < n; i++) {
-			sol.push_back(string(queens[i], '.') + 'Q' +
-				string(n - queens[i] - 1, '.'));
-		}
+		vector<string> sol(n, string(n, '.'));
+		for(int i = 0; i < n; i++)
+			sol[i][queens[i]] = 'Q';
+
 		solutions.push_back(sol);
 	}
 
