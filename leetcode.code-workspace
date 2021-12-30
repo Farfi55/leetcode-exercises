@@ -57,7 +57,10 @@
 			"queue": "cpp",
 			"algorithm": "cpp",
 			"deque": "cpp",
-			"stack": "cpp"
+			"stack": "cpp",
+			"set": "cpp",
+			"unordered_map": "cpp",
+			"xhash": "cpp"
 		}
 	}
 }
