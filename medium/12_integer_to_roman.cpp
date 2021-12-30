@@ -16,54 +16,27 @@ public:
 		const uint16_t roman_values[7] = { 1000, 500, 100, 50, 10, 5, 1 };
 		const char roman_symbols[7] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
 
-		out += string((num / 1000), 'M');
-		num %= 1000;
-		if(num >= 900) {
-			num -= 900;
-			out += "CM";
-		}
-		else if(num >= 500) {
-			num -= 500;
-			out += "D";
-		}
-		else if(num >= 400) {
-			num -= 400;
-			out += "CD";
-		}
 
-		out += string((num / 100), 'C');
-		num %= 100;
-
-		if(num >= 90) {
-			num -= 90;
-			out += "XC";
+		for(int i = 0; i < 7; i += 2) {
+			int val = roman_values[i];
+			int times = num / val;
+			if(times == 9) {
+				out += roman_symbols[i];
+				out += roman_symbols[i - 2];
+			}
+			else if(times == 4) {
+				out += roman_symbols[i];
+				out += roman_symbols[i - 1];
+			}
+			else {
+				if(times >= 5) {
+					out += roman_symbols[i - 1];
+					times -= 5;
+				}
+				out += string(times, roman_symbols[i]);
+			}
+			num %= val;
 		}
-		else if(num >= 50) {
-			num -= 50;
-			out += "L";
-		}
-		else if(num >= 40) {
-			num -= 40;
-			out += "XL";
-		}
-
-		out += string((num / 10), 'X');
-		num %= 10;
-
-		if(num == 9) {
-			num -= 9;
-			out += "IX";
-		}
-		else if(num >= 5) {
-			num -= 5;
-			out += "V";
-		}
-		else if(num == 4) {
-			num -= 4;
-			out += "IV";
-		}
-
-		out += string(num, 'I');
 
 		return out;
 	}
