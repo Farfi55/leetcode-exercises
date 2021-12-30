@@ -5,6 +5,7 @@
  */
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -34,9 +35,12 @@ public:
 
 	for .*
 	*/
+	vector<vector<int8_t>> data;
 
 
 	bool isMatch(string s, string p) {
+
+		data = vector<vector<int8_t>>(s.length() + 1, vector<int8_t>(p.length() + 1, -1));
 		return isMatch(s, p, 0, 0);
 	}
 
@@ -44,45 +48,56 @@ public:
 		return pattern_char == '.' || str_char == pattern_char;
 	}
 
-	bool canIgnoreRemainingPattern(string& p, int idx_p) {
-		//if the remaining pattern has an odd number of characters we can't ignore it 
-		if((p.length() - idx_p) % 2) return false;
+	// bool canIgnoreRemainingPattern(string& p, int idx_p) {
+	// 	//if the remaining pattern has an odd number of characters we can't ignore it 
+	// 	if((p.length() - idx_p) % 2) return false;
 
-		for(; idx_p < p.length(); idx_p += 2) {
-			if(p[idx_p + 1] != '*') return false;
-		}
-		return true;
-	}
+	// 	for(; idx_p < p.length(); idx_p += 2) {
+	// 		if(p[idx_p + 1] != '*') return false;
+	// 	}
+	// 	return true;
+	// }
 
 
 /*
 	"aa"
 	"a*"
 */
-	bool isMatch(string& s, string& p, int idx_s, int idx_p) {
-		// if we're done with the string and the pattern we
-		if(s.length() == idx_s)
-			return (p.length() == idx_p
-				|| canIgnoreRemainingPattern(p, idx_p));
-		if(p.length() == idx_p) return false;
+	bool isMatch(string& str, string& patt, int idx_s, int idx_p) {
 
-		if(idx_p < p.length() - 1 && p[idx_p + 1] == '*') {
+		if(data[idx_s][idx_p] != -1) return  data[idx_s][idx_p];
+
+		bool ans = false;
+		// if we're done with the string and the pattern we
+		// if(str.length() == idx_s)
+		// 	return (patt.length() == idx_p
+		// 		|| canIgnoreRemainingPattern(patt, idx_p));
+		if(idx_p == patt.length())
+			ans = (idx_s == str.length());
+		else if(idx_p < patt.length() - 1 && patt[idx_p + 1] == '*') {
 			// case 0 repetitions:
 			// we ignore the "_*"
-			if(isMatch(s, p, idx_s, idx_p + 2)) return true;
-
-			// while the char we are repeating matches
-			// the string we can try using it to "cover" that next character
-			while(idx_s < s.length() && charMatch(s[idx_s], p[idx_p])) {
-				idx_s++;
-				if(isMatch(s, p, idx_s, idx_p + 2)) return true;
+			if(isMatch(str, patt, idx_s, idx_p + 2)) ans = true;
+			else {
+				// while the char we are repeating matches
+				// the string we can try using it to "cover" that next character
+				while(idx_s < str.length() && charMatch(str[idx_s], patt[idx_p])) {
+					idx_s++;
+					if(isMatch(str, patt, idx_s, idx_p + 2)) {
+						ans = true;
+						break;
+					}
+				}
 			}
 			// if no combination worked then this doesn't match
-			return false;
+			// ans = false;
 		}
 		else
-			return charMatch(s[idx_s], p[idx_p])
-			&& isMatch(s, p, idx_s + 1, idx_p + 1);
+			ans = (idx_s < str.length() && charMatch(str[idx_s], patt[idx_p])
+				&& isMatch(str, patt, idx_s + 1, idx_p + 1));
+
+		data[idx_s][idx_p] = ans;
+		return ans;
 
 	}
 };
@@ -92,6 +107,6 @@ public:
 int main(int argc, char const* argv[])
 {
 	Solution sol;
-	cout << sol.isMatch("a", "ab*");
+	cout << sol.isMatch("a", ".*..a*");
 	return 0;
 }
