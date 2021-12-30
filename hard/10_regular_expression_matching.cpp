@@ -9,47 +9,42 @@
 
 using namespace std;
 
+// from
+// https://leetcode.com/problems/regular-expression-matching/discuss/5665/My-concise-recursive-and-DP-solutions-with-full-explanation-in-C%2B%2B
+
 // @lc code=start
 class Solution {
 public:
-
 	bool isMatch(string s, string p) {
-		vector<vector<int>> data = vector<vector<int>>(s.length() + 1, vector<int>(p.length() + 1, -1));
-		return isMatch(s, p, 0, 0, data);
-	}
+		/**
+		 * f[i][j]: if s[0..i-1] matches p[0..j-1]
+		 * if p[j - 1] != '*'
+		 *      f[i][j] = f[i - 1][j - 1] && s[i - 1] == p[j - 1]
+		 * if p[j - 1] == '*', denote p[j - 2] with x
+		 *      f[i][j] is true iff any of the following is true
+		 *      1) "x*" repeats 0 time and matches empty: f[i][j - 2]
+		 *      2) "x*" repeats >= 1 times and matches "x*x": s[i - 1] == x && f[i - 1][j]
+		 * '.' matches any single character
+		 */
+		int m = s.size(), n = p.size();
+		vector<vector<bool>> f(m + 1, vector<bool>(n + 1, false));
 
-	bool isMatch(const string& str, const string& patt, int idx_s, int idx_p, vector<vector<int>>& data) {
+		f[0][0] = true;
+		for(int i = 1; i <= m; i++)
+			f[i][0] = false;
+		// p[0.., j - 3, j - 2, j - 1] matches empty iff p[j - 1] is '*' and p[0..j - 3] matches empty
+		for(int j = 1; j <= n; j++)
+			f[0][j] = j > 1 && '*' == p[j - 1] && f[0][j - 2];
 
-		if(data[idx_s][idx_p] != -1) return data[idx_s][idx_p];
+		for(int i = 1; i <= m; i++)
+			for(int j = 1; j <= n; j++)
+				if(p[j - 1] != '*')
+					f[i][j] = f[i - 1][j - 1] && (s[i - 1] == p[j - 1] || '.' == p[j - 1]);
+				else
+					// p[0] cannot be '*' so no need to check "j > 1" here
+					f[i][j] = f[i][j - 2] || (s[i - 1] == p[j - 2] || '.' == p[j - 2]) && f[i - 1][j];
 
-		bool ans = false;
-		if(idx_p == patt.length())
-			ans = (idx_s == str.length());
-		else if(idx_p < patt.length() - 1 && patt[idx_p + 1] == '*') {
-			// case 0 repetitions:
-			if(isMatch(str, patt, idx_s, idx_p + 2, data)) ans = true;
-			else {
-				// while the char we are repeating matches
-				// the string we can try using it to "cover" that next character
-				while(idx_s < str.length() &&
-					(patt[idx_p] == '.' || str[idx_s] == patt[idx_p])) {
-					idx_s++;
-					if(isMatch(str, patt, idx_s, idx_p + 2, data)) {
-						ans = true;
-						break;
-					}
-				}
-			}
-		}
-		else {
-			ans = (idx_s < str.length()
-				&& (patt[idx_p] == '.' || str[idx_s] == patt[idx_p])
-				&& isMatch(str, patt, idx_s + 1, idx_p + 1, data));
-		}
-
-		data[idx_s][idx_p] = ans;
-		return ans;
-
+		return f[m][n];
 	}
 };
 // @lc code=end
