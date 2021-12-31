@@ -23,29 +23,32 @@ public:
 				// if the first element of the triplet is > 0, 
 				// we won't find any that summed will give 0 anymore
 
+
 				int front = j + 1;
 				int back = n - 1;
 
-				while(front < back) {
+				int sum_target = target - nums[i] - nums[j];
 
-					int64_t sum = (int64_t)nums[i] + nums[j] + nums[front] + nums[back];
-					if(sum < target) front++;
-					else if(sum > target) back--;
+				while(front < back) {
+					int two_sum = nums[front] + nums[back];
+
+					if(two_sum < sum_target) front++;
+					else if(two_sum > sum_target) back--;
 					else {
 						vector<int> quadrutuplet{ nums[i], nums[j], nums[front], nums[back] };
 						out.push_back(quadrutuplet);
 
-						// getting the next value for left and right
+						// processing front and back duplicates
 						while(front + 1 < back && nums[front] == quadrutuplet[2]) ++front;
 						while(front < back && nums[back] == quadrutuplet[3]) --back;
 					}
 				}
-				// we skip to the next value for j
-				while(j + 1 < n && nums[j] == nums[j + 1]) j++;
+				// processing j duplicates
+				while(j + 3 < n && nums[j] == nums[j + 1]) j++;
 
 			}
-			// we skip to the next value for i
-			while(i + 1 < n && nums[i] == nums[i + 1]) i++;
+			// processing j duplicates
+			while(i + 4 < n && nums[i] == nums[i + 1]) i++;
 		}
 		return out;
 	}
