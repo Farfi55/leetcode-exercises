@@ -12,42 +12,29 @@ using namespace std;
 
 	// @lc code=start
 class Solution {
-	int validLenght(string s, int i) {
-		int n = s.length();
-		int diff = 0;
-		int start = i;
-		int max_valid = 0;
-		while(i < n) {
-			if(s[i] == '(') {
-				diff++;
-				i++;
-				if(diff > n - i)
-					break;
-			}
-			else { // s[i] == ')'
-				diff--;
-				i++;
-				// for sure valid untill here
-				if(diff == 0) {
-					if(i - start > max_valid)
-						max_valid = i - start;
-				}
-				else if(diff < 0) {
-					break;
-				}
-			}
-
-		}
-		return max_valid;
-	}
 public:
 	int longestValidParentheses(string s) {
 		int n = s.length();
+		vector<int> dp(n, 0);
 		int max_valid = 0;
-		for(int i = 0; i < n; i++) {
-			int curr_valid = validLenght(s, i);
-			if(curr_valid > max_valid)
-				max_valid = curr_valid;
+
+		for(int i = 1; i < n; i++) {
+			if(s[i] == ')') {
+				if(s[i - 1] == '(') { // ...()
+					dp[i] = 2;
+					if(i > 2)
+						dp[i] += dp[i - 2];
+				}
+				else { // ...))
+					int j = i - dp[i - 1] - 1;
+					if(j >= 0 && s[j] == '(') { // ...((.valid.))
+						dp[i] = dp[i - 1] + 2;
+						if(j > 0)
+							dp[i] += dp[j - 1];
+					}
+				}
+				max_valid = max(max_valid, dp[i]);
+			}
 		}
 		return max_valid;
 	}
