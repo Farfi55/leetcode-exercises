@@ -31,25 +31,30 @@ struct ListNode {
  */
 class Solution {
 public:
-	void next(ListNode*& node) {
-		node = node->next;
-	}
 
 	ListNode* removeNthFromEnd(ListNode* head, int n) {
-		ListNode* end = head;
+		// double pointer is needed to make changes that apply to
+		// the list pointed by head
+		ListNode** tail_node = &head;
+		ListNode* scout_node = head;
 
+		// we make the scout node advance n-1 times
 		for(int i = 1; i < n; i++) {
-			next(end);
-		}
-		ListNode* curr = head;
-
-		while(end->next) {
-			next(end);
-			next(curr);
+			scout_node = scout_node->next;
 		}
 
-		curr = n > 1 ? curr->next : nullptr;
+		// then both scout and tail advance
+		// untill scout reaches the end of the list
+		while(scout_node->next) {
+			tail_node = &((*tail_node)->next);
+			scout_node = scout_node->next;
+		}
 
+		// at this point we assign at the address pointed from tail
+		// the address of the next node
+		ListNode* tmp = *tail_node;
+		*tail_node = (*tail_node)->next;
+		delete tmp;
 		return head;
 	}
 };
