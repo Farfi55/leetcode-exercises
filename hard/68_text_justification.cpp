@@ -12,6 +12,38 @@ using namespace std;
 
 // @lc code=start
 class Solution {
+	string format_last_line(vector<string>& words, int maxWidth, int start, int end, int capacity) {
+		string line = words[start];
+		for(int i = start + 1; i < end; i++) {
+			line += ' ';
+			line += words[i];
+		}
+		line += string(capacity, ' ');
+		return line;
+	}
+
+	string format_line(vector<string>& words, int maxWidth, int start, int end, int capacity) {
+		if(end == words.size())
+			return format_last_line(words, maxWidth, start, end, capacity);
+
+		string line = words[start];
+		int spaces = 1;
+		int separations = end - start - 1;
+		if(separations > 0) {
+			spaces += capacity / separations;
+			capacity %= separations;
+		}
+
+		for(int i = start + 1; i < end; i++) {
+			line += string(spaces + (capacity-- > 0), ' ');
+			line += words[i];
+		}
+
+		if(separations == 0) line += string(capacity, ' ');
+		return line;
+	}
+
+
 public:
 	vector<string> fullJustify(vector<string>& words, int maxWidth) {
 		int n = words.size();
@@ -24,25 +56,8 @@ public:
 			while(end < n && capacity > words[end].length()) {
 				capacity -= words[end++].length() + 1;
 			}
-			bool last_line = (end == n);
 
-			int separations = end - start - 1;
-			int spaces = 1;
-			if(!last_line && separations > 0) {
-				spaces += capacity / separations;
-				capacity %= separations;
-			}
-
-
-			string line = words[start];
-			for(int i = start + 1; i < end; i++) {
-				if(last_line) line += ' ';
-				else line += string(spaces + (capacity-- > 0), ' ');
-				line += words[i];
-			}
-			if(last_line || separations == 0) line += string(capacity, ' ');
-			out.push_back(line);
-
+			out.push_back(format_line(words, maxWidth, start, end, capacity));
 			start = end;
 		}
 		return out;
