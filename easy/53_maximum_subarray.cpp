@@ -14,20 +14,13 @@ class Solution {
 public:
 	int maxSubArray(vector<int>& nums) {
 		const int n = nums.size();
-		vector<vector<int>> dp(n, vector<int>(n, 0));
 		int max_sum = nums[0];
+		int curr_sum = 0;
 
 		for(int i = 0; i < n; i++) {
-			max_sum = max(nums[i], max_sum);
-			dp[i][i] = nums[i];
-		}
-
-		for(int i = 1; i < n; i++) {
-			for(int j = 0; j < n - i; j++) {
-				int sum = dp[j][i + j - 1] + dp[i + j][i + j];
-				max_sum = max(sum, max_sum);
-				dp[j][i + j] = sum;
-			}
+			curr_sum += nums[i];
+			if(curr_sum > max_sum) max_sum = curr_sum;
+			if(curr_sum < 0) curr_sum = 0;
 		}
 		return max_sum;
 	}
@@ -39,7 +32,7 @@ int main(int argc, char const* argv[])
 	Solution sol;
 	vector<int> nums;
 	int x; cin >> x;
-	while(x != 13131) {
+	while(x != 111) {
 		nums.push_back(x);
 		cin >> x;
 	}
