@@ -5,18 +5,20 @@
  */
 
 #include <vector>
-#include <unordered_map>
+#include <algorithm>
 
 using namespace std;
 // @lc code=start
 class Solution {
 public:
 	bool containsDuplicate(vector<int>& nums) {
-		unordered_map<int, bool> hash_map;
-		for(int num : nums) {
-			if(hash_map.find(num) != hash_map.end()) return true;
-			else hash_map[num] = true;
-		}
+		int n = nums.size() - 1;
+		sort(nums.begin(), nums.end());	// O(nlog(n)) 
+
+		for(int i = 0; i < n; i++)		// O(n)
+			if(nums[i] == nums[i + 1])
+				return true;
+
 		return false;
 	}
 };
