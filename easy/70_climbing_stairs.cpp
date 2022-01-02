@@ -13,30 +13,18 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
-/*
-n: 8
-	  0   1   2	  3	  4	  5	  6	  7
-	[ -,  -,  -,  -,  -,  -,  -,  1,  1]
-	[ -,  -,  -,  -,  -,  -,  2,  1,  1]
-	[ -,  -,  -,  -,  -,  3,  2,  1,  1]
-	[ -,  -,  -,  -,  5,  3,  2,  1,  1]
-	[ -,  -,  -,  8,  5,  3,  2,  1,  1]
-	[ -,  -, 13,  8,  5,  3,  2,  1,  1]
-	[ -, 21, 13,  8,  5,  3,  2,  1,  1]
-	[34, 21, 13,  8,  5,  3,  2,  1,  1]
-
-*/
-
-
 	int climbStairs(int n) {
-		vector<int> dp(n + 1, 0);
-		dp[n - 1] = dp[n] = 1;
+		int ret = 0;
+		int step_one = 1;
+		int step_two = 0;
 
-		for(int i = n - 2; i >= 0; --i) {
-			dp[i] = dp[i + 1] + dp[i + 2];
+		for(int i = 0; i < n; ++i) {
+			ret = step_one + step_two;
+			step_two = step_one;
+			step_one = ret;
 		}
 
-		return dp[0];
+		return ret;
 	}
 };
 // @lc code=end
