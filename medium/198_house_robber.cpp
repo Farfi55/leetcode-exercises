@@ -25,25 +25,21 @@ class Solution {
 public:
 	int rob(vector<int>& nums) {
 		const int n = nums.size();
-		if(n == 1) return nums[0];
-		if(n == 2) return max(nums[0], nums[1]);
 
-		vector<int> dp(n + 1, -1);
-		dp[0] = nums[0];
-		dp[1] = max(nums[0], nums[1]);
+		vector<int> dp(n + 2, 0);
 
-		for(int i = 2; i < n; i++) {
-			dp[i] = max(dp[i - 1], nums[i] + dp[i - 2]);
+		for(int i = 2; i < n + 2; i++) {
+			dp[i] = max(dp[i - 1], nums[i - 2] + dp[i - 2]);
 		}
-		dp[n] = max(dp[n - 1], dp[n - 2]);
-		return dp[n];
+		return max(dp[n], dp[n + 1]);
 	}
 };
 // @lc code=end
 
 int main(int argc, char const* argv[])
 {
-	vector<int> houses = { 2, 1, 1, 2 };
+	// vector<int> houses = { 2, 1, 1, 2 };
+	vector<int> houses = { 1, 2, 3, 1 };
 	Solution sol;
 	cout << sol.rob(houses);
 	return 0;
