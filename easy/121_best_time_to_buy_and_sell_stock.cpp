@@ -19,15 +19,17 @@ public:
 
 		// brute force
 		int max_diff = 0;
-		for(int i = 0; i < n; i++) {
-			for(int j = n - 1; j > i; j--) {
-				if(prices[j] - prices[i] > max_diff)
-					max_diff = prices[j] - prices[i];
-			}
+		vector<int> dp(n, 0);
+		dp[0] = prices[0];
+
+		for(int i = 1; i < n; i++) {
+			dp[i] = min(dp[i - 1], prices[i]);
 		}
-
+		for(int i = n - 1; i > 0; --i) {
+			if(prices[i] - dp[i] > max_diff)
+				max_diff = prices[i] - dp[i];
+		}
 		return max_diff;
-
 	}
 };
 // @lc code=end
