@@ -14,25 +14,15 @@ using namespace std;
 // @lc code=start
 class Solution {
 	// dp[i] = max{ dp[i+1], W[i] + dp[i+2] } 
-
-	int rob(vector<int>& nums, int i, vector<int>& dp) {
-		if(i >= nums.size()) return 0;
-		if(dp[i] != -1) return dp[i];
-		dp[i] = max(rob(nums, i + 1, dp), nums[i] + rob(nums, i + 2, dp));
-		return dp[i];
-	}
-
 public:
 	int rob(vector<int>& nums) {
 		const int n = nums.size();
-
 		if(n == 1) return nums[0];
 
-		int prev2 = nums[0];
-		int prev = max(nums[0], nums[1]);
-		int robbed = prev;
+		int prev = 0, prev2 = 0;
+		int robbed = 0;
 
-		for(int i = 2; i < n; i++) {
+		for(int i = 0; i < n; i++) {
 			robbed = max(prev, nums[i] + prev2);
 			prev2 = prev;
 			prev = robbed;
