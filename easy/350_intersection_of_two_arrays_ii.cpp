@@ -6,6 +6,7 @@
 
 
 #include <vector>
+#include <unordered_map>
 #include <queue>
 #include <iostream>
 
@@ -18,19 +19,16 @@ public:
 	vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
 		const int n = nums1.size();
 		const int m = nums2.size();
+		if(n > m)
+			return intersect(nums2, nums1);
 
 		vector<int> out;
-		out.reserve(min(n, m));
+		unordered_map<int, int> dict;
 
-		int values1[10001] = { 0 };
-		int values2[10001] = { 0 };
-
-		for(int value : nums1) values1[value]++;
-		for(int value : nums2) values2[value]++;
-
-		for(int i = 0; i <= 1000; i++) {
-			while(values1[i]-- && values2[i]--) out.push_back(i);
-		}
+		for(int i = 0; i < n; i++) dict[nums1[i]]++;
+		for(int i = 0; i < m; i++)
+			if(dict.find(nums2[i]) != dict.end() && --dict[nums2[i]] >= 0)
+				out.push_back(nums2[i]);
 		return out;
 
 	}
