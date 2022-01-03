@@ -6,7 +6,6 @@
 
 
 #include <vector>
-#include <queue>
 #include <iostream>
 
 using namespace std;
@@ -16,20 +15,14 @@ class Solution {
 public:
 	int maxProfit(vector<int>& prices) {
 		int n = prices.size();
+		int max_profit = 0;
+		int min_price = prices[0];
 
-		// brute force
-		int max_diff = 0;
-		vector<int> dp(n, 0);
-		dp[0] = prices[0];
-
-		for(int i = 1; i < n; i++) {
-			dp[i] = min(dp[i - 1], prices[i]);
+		for(int i = 1; i < n; ++i) {
+			min_price = min(min_price, prices[i]);
+			max_profit = max(max_profit, prices[i] - min_price);
 		}
-		for(int i = n - 1; i > 0; --i) {
-			if(prices[i] - dp[i] > max_diff)
-				max_diff = prices[i] - dp[i];
-		}
-		return max_diff;
+		return max_profit;
 	}
 };
 // @lc code=end
@@ -38,7 +31,7 @@ public:
 int main(int argc, char const* argv[])
 {
 	Solution sol;
-	vector<int> prices = { 5, 15, 75 };
+	vector<int> prices = { 7, 8, 4, 18, 3, 19 };
 	auto out = sol.maxProfit(prices);
 	cout << out;
 
