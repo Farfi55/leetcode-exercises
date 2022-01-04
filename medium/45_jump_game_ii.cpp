@@ -28,29 +28,24 @@ JUMP 2: [4]
 
 // @lc code=start
 class Solution {
-	int getMaxReach(const vector<int>& nums, int prev, int curr) {
-		int max_reach = 0;
-		for(int i = prev + 1; i <= curr; i++)
-			max_reach = max(i + nums[i], max_reach);
-
-		return max_reach;
-	}
 public:
 	int jump(const vector<int>& nums) {
 		int n = nums.size();
 		if(n == 1) return 0;
 
-		int curr_reach = nums[0];
+		int i = nums[0];
 		int prev_reach = 0;
 		int jumps = 1;
 
-		while(curr_reach < n - 1) {
-			int new_reach = getMaxReach(nums, prev_reach, curr_reach);
-			prev_reach = curr_reach;
-			curr_reach = new_reach;
+		while(i < n - 1) {
+			int new_reach = 0;
+			for(int j = prev_reach + 1; j <= i; j++)
+				new_reach = max(j + nums[j], new_reach);
 
+			i = new_reach;
 			jumps++;
 		}
+
 		return jumps;
 	}
 };
