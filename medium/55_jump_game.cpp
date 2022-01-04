@@ -14,12 +14,11 @@ public:
 	bool canJump(vector<int>& nums) {
 		const int n = nums.size();
 
-		int jumps = nums[0];
-		int i;
-		for(i = 0; jumps && i + jumps < n; i++) {
-			jumps = max(nums[i], jumps - 1);
-		}
-		return (i + jumps >= n) || (n == 1);
+		int i = 0;
+		for(int reach = 0; i < n && i <= reach; ++i)
+			reach = max(i + nums[i], reach);
+
+		return i == n;
 	}
 };
 // @lc code=end
