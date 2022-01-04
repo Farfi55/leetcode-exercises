@@ -64,6 +64,6 @@
 			"list": "cpp",
 			"unordered_set": "cpp"
 		},
-		"discord.enabled": true
+		"discord.enabled": false
 	}
 }
