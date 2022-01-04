@@ -16,10 +16,10 @@ public:
 
 		int jumps = nums[0];
 		int i;
-		for(i = 0; jumps && i < n; i++) {
+		for(i = 0; jumps && i + jumps < n; i++) {
 			jumps = max(nums[i], jumps - 1);
 		}
-		return (i == n) || (n == 1);
+		return (i + jumps >= n) || (n == 1);
 	}
 };
 // @lc code=end
