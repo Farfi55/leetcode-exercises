@@ -31,18 +31,18 @@ class Solution {
 public:
 	int jump(const vector<int>& nums) {
 		int n = nums.size();
-		if(n == 1) return 0;
+		int end = 0;
+		int start = 0;
+		int jumps = 0;
 
-		int i = nums[0];
-		int prev_reach = 0;
-		int jumps = 1;
+		while(end < n - 1) {
 
-		while(i < n - 1) {
-			int new_reach = 0;
-			for(int j = prev_reach + 1; j <= i; j++)
-				new_reach = max(j + nums[j], new_reach);
+			int max_end = 0;
+			for(int i = start; i <= end; i++)
+				max_end = max(i + nums[i], max_end);
 
-			i = new_reach;
+			start = end + 1;
+			end = max_end;
 			jumps++;
 		}
 
