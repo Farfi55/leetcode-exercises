@@ -23,38 +23,25 @@ which is already been solved.
 */
 // @lc code=start
 class Solution {
+
+	int rob(vector<int>& nums, int start, int end) {
+		int prev = 0, prev2 = 0;
+		int robbed = 0;
+
+		for(int i = start; i < end; i++) {
+			robbed = max(prev, nums[i] + prev2);
+			prev2 = prev;
+			prev = robbed;
+		}
+		return robbed;
+	}
+
 public:
 	int rob(vector<int>& nums) {
 		const int n = nums.size();
 		if(n == 1) return nums[0];
-		if(n == 2) return max(nums[0], nums[1]);
-		if(n == 3) return max(nums[0], max(nums[1], nums[2]));
 
-		int prev = 0, prev2 = 0;
-		int robbed = 0;
-
-		bool chose_first = (nums[0] + nums[n - 2] > nums[1] + nums[n - 1]);
-
-
-		for(int i = 0; i < n - 1; i++) {
-			robbed = max(prev, nums[i] + prev2);
-			prev2 = prev;
-			prev = robbed;
-		}
-		int robbery_1 = robbed;
-
-		robbed = 0;
-		prev = 0;
-		prev2 = 0;
-
-		for(int i = 1; i < n; i++) {
-			robbed = max(prev, nums[i] + prev2);
-			prev2 = prev;
-			prev = robbed;
-		}
-
-
-		return max(robbery_1, robbed);
+		return max(rob(nums, 0, n - 1), rob(nums, 1, n));
 	}
 };
 // @lc code=end
