@@ -16,16 +16,12 @@ public:
 		int cols = 1;
 
 		vector<vector<int>> out(numRows);
-
 		for(int i = 0; i < numRows; i++) {
 			out[i] = vector<int>(i + 1, 1);
-		}
 
-
-		for(int i = 2; i < numRows; i++) {
-			for(int j = 1; j < i; j++) {
+			for(int j = 1; j < i; j++)
 				out[i][j] = out[i - 1][j - 1] + out[i - 1][j];
-			}
+
 		}
 		return out;
 	}
