@@ -4,12 +4,12 @@
  * [1029] Two City Scheduling
  */
 
+#include <queue>
 #include <vector>
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
-
 
 // @lc code=start
 class Solution {
@@ -19,13 +19,24 @@ public:
 	}
 
 	int twoCitySchedCost(vector<vector<int>>& costs) {
+		int N = costs.size();
 		int n = costs.size() / 2;
 
-		sort(costs.begin(), costs.end(), custom_sort);
+		// basically an heap
+		priority_queue<pair<int, int>> pq;
+
+		for(int i = 0; i < N; i++) {
+			pq.push(make_pair(costs[i][0] - costs[i][1], i));
+		}
+
 		int tot = 0;
 		for(int i = 0; i < n; i++) {
-			tot += costs[i][0];
-			tot += costs[i + n][1];
+			tot += costs[pq.top().second][1];
+			pq.pop();
+		}
+		for(int i = 0; i < n; i++) {
+			tot += costs[pq.top().second][0];
+			pq.pop();
 		}
 		return tot;
 	}
