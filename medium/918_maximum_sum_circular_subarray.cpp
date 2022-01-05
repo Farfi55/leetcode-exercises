@@ -18,21 +18,17 @@ public:
 		int tot_sum = 0;
 		int sum_pos = 0;
 		int sum_neg = 0;
+		int max_sum = nums[0];
+		int min_sum = nums[0];
 
-		int max_sum = INT_MIN;
-		int min_sum = INT_MAX;
-
-		for(int i = 0; i < n; i++) {
-			int val = nums[i];
-			sum_pos += val;
-			sum_neg += val;
-			tot_sum += val;
+		for(int& x : nums) {
+			sum_pos = max(sum_pos + x, x);
+			sum_neg = min(sum_neg + x, x);
 
 			max_sum = max(sum_pos, max_sum);
 			min_sum = min(sum_neg, min_sum);
 
-			if(sum_pos < 0) sum_pos = 0;
-			if(sum_neg > 0) sum_neg = 0;
+			tot_sum += x;
 		}
 
 		if(tot_sum == min_sum) return max_sum;
