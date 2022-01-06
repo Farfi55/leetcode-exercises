@@ -30,16 +30,13 @@ public:
 			curr_neg_prod *= val;
 			curr_pos_prod *= val;
 
-			max_prod = max(curr_pos_prod, max_prod);
-			max_prod = max(curr_neg_prod, max_prod);
-
 			if(curr_neg_prod > curr_pos_prod)
 				swap(curr_pos_prod, curr_neg_prod);
 
-			if(curr_pos_prod <= 0)
-				curr_pos_prod = max(1, curr_neg_prod);
-			if(curr_neg_prod >= 0)
-				curr_neg_prod = min(1, curr_pos_prod);
+			max_prod = max(curr_pos_prod, max_prod);
+
+			if(curr_pos_prod <= 0) curr_pos_prod = max(1, curr_neg_prod);
+			if(curr_neg_prod >= 0) curr_neg_prod = min(1, curr_pos_prod);
 
 		}
 		return max_prod;
