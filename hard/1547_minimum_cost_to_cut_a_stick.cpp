@@ -43,25 +43,43 @@ public:
 	// 		minCost(cuts, cut, end, cut_idx + 1, _j);
 	// }
 
-	int dp[102][102] = {};
-	int dfs(vector<int>& cuts, int i, int j) {
-		if(j - i <= 1) return 0;
+	// int dfs(vector<int>& cuts, int i, int j) {
+	// 	if(j - i <= 1) return 0;
 
-		if(!dp[i][j]) {
-			dp[i][j] = INT_MAX;
-			for(auto k = i + 1; k < j; ++k)
-				dp[i][j] = min(dp[i][j],
-					(cuts[j] - cuts[i]) + dfs(cuts, i, k) + dfs(cuts, k, j));
-		}
-		return dp[i][j];
-	}
+	// 	if(!dp[i][j]) {
+	// 		dp[i][j] = INT_MAX;
+	// 		for(auto k = i + 1; k < j; ++k)
+	// 			dp[i][j] = min(dp[i][j],
+	// 				(cuts[j] - cuts[i]) + dfs(cuts, i, k) + dfs(cuts, k, j));
+	// 	}
+	// 	return dp[i][j];
+	// }
+
 	int minCost(int n, vector<int>& cuts) {
 		// we add 0 and n as cuts
 		cuts.push_back(0);
 		cuts.push_back(n);
 		// we sort the cuts
 		sort(begin(cuts), end(cuts));
-		return dfs(cuts, 0, cuts.size() - 1);
+
+		const int n_cuts = cuts.size();
+
+		vector<vector<int>> dp(n_cuts, vector<int>(n_cuts, 0));
+
+		for(int i = 0; i < n_cuts; i++) {
+			// this makes it bottom-up 
+			// because we always process the smaller cuts first
+			for(int j = i - 1; j >= 0; j--) {
+				for(int k = j + 1; k < i; k++) {
+					dp[j][i] = min(dp[j][i] ? dp[j][i] : INT_MAX,
+						(cuts[i] - cuts[j]) + dp[j][k] + dp[k][i]);
+
+				}
+
+			}
+		}
+		return dp[0][n_cuts - 1];
+
 	}
 
 };
