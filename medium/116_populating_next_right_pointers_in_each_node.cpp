@@ -34,33 +34,18 @@ public:
 
 class Solution {
 public:
-	Node* connect(Node* root) {
-		if(!root) return nullptr;
+	Node* connect(Node* node) {
+		if(!node) return nullptr;
 
-		queue<Node*> nodes;
-		nodes.push(root);
+		if(node->left)
+			node->left->next = node->right;
 
-		int count = 0;
-		int nodes_this_level = 1;
-		while(!nodes.empty()) {
-			Node* node = nodes.front();
-			nodes.pop();
+		if(node->right && node->next)
+			node->right->next = node->next->left;
 
-			if(++count == nodes_this_level) {
-				count = 0;
-				nodes_this_level *= 2;
-				node->next = nullptr;
-			}
-			else {
-				node->next = nodes.front();
-			}
-
-			if(node->left)
-				nodes.push(node->left);
-			if(node->right)
-				nodes.push(node->right);
-		}
-		return root;
+		connect(node->left);
+		connect(node->right);
+		return node;
 	}
 };
 // @lc code=end
