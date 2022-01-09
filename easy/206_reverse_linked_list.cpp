@@ -35,26 +35,21 @@ struct ListNode {
 class Solution {
 public:
 	ListNode* reverseList(ListNode* head) {
-		stack<ListNode*> nodes;
+		stack<int> nodes_values;
+		ListNode* node = head;
 
-		while(head) {
-			nodes.push(head);
-			head = head->next;
-		}
-
-		if(nodes.empty()) return nullptr;
-
-		ListNode* out = nodes.top();
-		ListNode* node = out;
-		nodes.pop();
-
-		while(!nodes.empty()) {
-			node->next = nodes.top();
-			nodes.pop();
+		while(node) {
+			nodes_values.push(node->val);
 			node = node->next;
 		}
-		node->next = nullptr;
-		return out;
+		node = head;
+		while(!nodes_values.empty()) {
+			node->val = nodes_values.top();
+			nodes_values.pop();
+			node = node->next;
+		}
+
+		return head;
 	}
 };
 // @lc code=end
