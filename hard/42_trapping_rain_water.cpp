@@ -13,27 +13,19 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
-	int trap(vector<int>& heights) {
-		int n = heights.size();
-		vector<int> height_left(n);
-		vector<int> height_right(n);
+	int trap(vector<int>& height) {
+		int l = 0, r = height.size() - 1;
+		int level = 0;
+		int water = 0;
 
-		int rain = 0;
-
-
-		height_left[0] = heights[0];
-		height_right[n - 1] = heights[n - 1];
-		for(int i = 1; i < n; i++) {
-			height_left[i] = max(height_left[i - 1], heights[i]);
-			height_right[n - 1 - i] = max(height_right[n - i], heights[n - 1 - i]);
+		while(l < r) {
+			// lower = whichever side il smallest, 
+			// then move it towards the other
+			int lower = height[height[l] < height[r] ? l++ : r--];
+			level = max(level, lower);
+			water += level - lower;
 		}
-
-		for(int i = 0; i < n; i++) {
-			int amount = min(height_left[i], height_right[i]) - heights[i];
-			if(amount > 0) rain += amount;
-		}
-
-		return rain;
+		return water;
 	}
 };
 // @lc code=end
