@@ -3,10 +3,6 @@
 		{
 			"name": ".leetcode",
 			"path": "."
-		},
-		{
-			"name": ".leetcode @ cf605c8",
-			"uri": "gitlens://cf605c8/c:/Users/Farfi/.leetcode?{\"path\":\"/c:/Users/Farfi/.leetcode\",\"ref\":\"cf605c8f10c35f6363b9c632739482a2ecea1a01\",\"repoPath\":\"c:/Users/Farfi/.leetcode\"}"
 		}
 	],
 	"settings": {
