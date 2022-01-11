@@ -13,22 +13,25 @@ using namespace std;
  */
 
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include <unordered_set>
+#include <set>
 
 using namespace std;
 
 // @lc code=start
 class Solution {
 	unordered_set<string> dict;
+	set<int> sizes;
 
-
-	bool rec(string s, int start) {
+	bool rec(string& s, int start) {
 		if(start == s.length()) return true;
 
-		for(int len = s.length() - start; len > 0 ; --len) {
-			if(dict.find(s.substr(start, len)) != dict.end()) // &&
+		for(const int& len : sizes) {
+			if(start + len > s.length()) return false;
+			else if(dict.find(s.substr(start, len)) != dict.end()) // &&
 				if(rec(s, start + len) == true)
 					return true;
 		}
@@ -38,9 +41,10 @@ class Solution {
 
 public:
 	bool wordBreak(string s, vector<string>& wordDict) {
-		for(string& word : wordDict)
+		for(string& word : wordDict) {
+			sizes.insert(word.length());
 			dict.insert(word);
-
+		}
 		return rec(s, 0);
 	}
 };
