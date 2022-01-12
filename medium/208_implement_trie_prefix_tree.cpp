@@ -14,46 +14,75 @@ using namespace std;
 
 class Trie {
 	Trie* children[26] = { 0 };
-	bool isWord = false;
+	bool is_word = false;
+
 
 public:
-	Trie() {}
-
-	Trie(string s) {
-		if(s.length() == 0)
-			isWord = true;
-		else {
-			children[s[0] - 'a'] = new Trie(s.substr(1));
-		}
+	~Trie() {
+		for(Trie*& node : children)
+			if(node)
+				delete node;
 	}
 
+	Trie() {}
+
+	Trie(const Trie& trie) {
+		is_word = trie.is_word;
+		for(int i = 0; i < 26;i++)
+			if(trie.children[i])
+				children[i] = new Trie(*trie.children[i]);
+	}
+
+	Trie operator=(const Trie& trie) {
+		is_word = trie.is_word;
+		for(int i = 0; i < 26;i++) {
+			if(children[i])
+				delete children[i];
+			if(trie.children[i])
+				children[i] = new Trie(*trie.children[i]);
+			else children[i] = nullptr;
+		}
+		return *this;
+	}
 
 	void insert(string word) {
-		if(word.length() == 0) isWord = true;
-		else {
-			char c = word[0] - 'a';
-			if(!children[c])
-				children[c] = new Trie(word.substr(1));
-			else children[c]->insert(word.substr(1));
+		Trie* curr_node = this;
+
+		for(int i = 0; i < word.length(); i++) {
+			char c = word[i] - 'a';
+			if(!curr_node->children[c])
+				curr_node->children[c] = new Trie();
+			curr_node = curr_node->children[c];
 		}
+		curr_node->is_word = true;
 	}
 
 
 	bool search(string word) {
-		if(word.length() == 0) return isWord;
+		Trie* curr_node = this;
 
-		char c = word[0] - 'a';
-		if(!children[c]) return false;
-		else return children[c]->search(word.substr(1));
+		for(int i = 0; i < word.length(); i++) {
+			char c = word[i] - 'a';
+			if(!curr_node->children[c])
+				return false;
+
+			curr_node = curr_node->children[c];
+		}
+		return curr_node->is_word;
 	}
 
 
 	bool startsWith(string prefix) {
-		if(prefix.length() == 0) return true;
+		Trie* curr_node = this;
 
-		char c = prefix[0] - 'a';
-		if(!children[c]) return false;
-		else return children[c]->startsWith(prefix.substr(1));
+		for(int i = 0; i < prefix.length(); i++) {
+			char c = prefix[i] - 'a';
+			if(!curr_node->children[c])
+				return false;
+
+			curr_node = curr_node->children[c];
+		}
+		return true;
 	}
 };
 
@@ -66,14 +95,18 @@ public:
  */
 // @lc code=end
 
-int main(int argc, char const* argv[])
+int main()
 {
-	Trie trie = Trie();
-	trie.insert("apple");
-	cout << trie.search("apple") << endl;   // return True
-	cout << trie.search("app") << endl;     // return False
-	cout << trie.startsWith("app") << endl; // return True
-	trie.insert("app");
-	cout << trie.search("app") << endl;     // return True
+	{
+		Trie trie = Trie();
+		trie.insert("apple");
+		trie.insert("pie");
+		cout << trie.search("apple") << endl;   // return True
+		cout << trie.search("app") << endl;     // return False
+		cout << trie.startsWith("app") << endl; // return True
+		trie.insert("app");
+		cout << trie.search("app") << endl;     // return True
+	}
+	cout << "i dont know\n";
 	return 0;
 }
