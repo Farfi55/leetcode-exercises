@@ -1,5 +1,7 @@
 // @before-stub-for-debug-begin
 #include <vector>
+#include <queue>
+#include <tuple>
 #include <string>
 // #include "commoncppproblem994.h"
 
@@ -32,43 +34,50 @@ my ans: 27
 class Solution {
 public:
 	int orangesRotting(vector<vector<int>>& grid) {
-		const int m = grid.size();
-		const int n = grid[0].size();
-		int max_time = m + n + 2;
-		int last_orange = 2;
+		const size_t m = grid.size();
+		const size_t n = grid[0].size();
+		uint32_t max_time = m + n + 2;
+		uint32_t last_orange = 2;
+		uint32_t fresh_oranges = 0;
 
+		queue<tuple<uint32_t, uint32_t, uint32_t>> q;
 
-		for(int i = 0; i < m; i++) {
-			for(int j = 0; j < n; j++) {
-				if(grid[i][j] == 2) continue;
-				if(grid[i][j] == 1) {
-					int top = i - 1 >= 0 ? grid[i - 1][j] : 0;
-					int left = j - 1 >= 0 ? grid[i][j - 1] : 0;
-					if(left && top) grid[i][j] = min(left, top) + 1;
-					else if(left) grid[i][j] = left + 1;
-					else if(top) grid[i][j] = top + 1;
-					else grid[i][j] = max_time;
+		for(size_t i = 0; i < m; i++)
+			for(size_t j = 0; j < n; j++)
+				if(grid[i][j] != 0) {
+					fresh_oranges++;
+					if(grid[i][j] == 2) {
+						// mark as fresh orange 
+						// and then change the valaue back inside the while loop
+						grid[i][j] = 1;
+						q.push(make_tuple(i, j, 2));
+					}
 				}
-			}
+
+
+
+		while(!q.empty()) {
+			uint32_t i = get<0>(q.front());
+			uint32_t j = get<1>(q.front());
+			uint32_t time = get<2>(q.front());
+			q.pop();
+
+			if(i >= m || j >= n || grid[i][j] != 1) continue;
+
+			grid[i][j] = time;
+			last_orange = max(time, last_orange);
+			fresh_oranges--;
+
+			q.push(make_tuple(i + 1, j, time + 1));
+			q.push(make_tuple(i - 1, j, time + 1));
+			q.push(make_tuple(i, j + 1, time + 1));
+			q.push(make_tuple(i, j - 1, time + 1));
 		}
 
-		for(int i = m - 1; i >= 0; --i) {
-			for(int j = n - 1; j >= 0; --j) {
-				if(grid[i][j] == 2 || grid[i][j] == 0) continue;
-				else {
-					int new_val;
-					int bot = i + 1 < m ? grid[i + 1][j] : 0;
-					int right = j + 1 < n ? grid[i][j + 1] : 0;
-					if(right && bot) new_val = min(right, bot) + 1;
-					else if(right) new_val = right + 1;
-					else if(bot) new_val = bot + 1;
-					else new_val = max_time;
-					grid[i][j] = min(grid[i][j], new_val);
-					last_orange = max(grid[i][j], last_orange);
-				}
-			}
-		}
-		return last_orange == max_time ? -1 : last_orange - 2;
+		// if there are oranges remaining, those will never rot, so we return -1
+		// otherwise we return the time of rotting of the last orange
+		return fresh_oranges ? -1 : last_orange - 2;
+
 	}
 };
 // @lc code=end
