@@ -19,12 +19,6 @@ public:
 		const int m = matrix.size();
 		const int n = matrix[0].size();
 
-		if(n == 1) {
-			int sum = 0;
-			for(int i = 0; i < m; i++) sum += matrix[i][0];
-			return sum;
-		}
-
 		for(int i = m - 2; i >= 0; i--) {
 			matrix[i][0] += min(matrix[i + 1][0], matrix[i + 1][1]);
 			for(int j = 1; j + 1 < n; j++) {
