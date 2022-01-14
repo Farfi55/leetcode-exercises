@@ -29,18 +29,12 @@ struct TreeNode {
 class Solution {
 public:
 	TreeNode* lowestCommonAncestor(TreeNode* node, TreeNode* p, TreeNode* q) {
-		int v1 = p->val;
-		int v2 = q->val;
-
-
 		while(node) {
-			int val = node->val;
-
-			if(v1 < val && v2 < val)
+			if(p->val < node->val && q->val < node->val)
 				node = node->left;
-			else if(v1 > val && v2 > val)
+			else if(p->val > node->val && q->val > node->val)
 				node = node->right;
-			else return node;
+			else break;
 		}
 		return node;
 	}
