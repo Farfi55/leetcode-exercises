@@ -5,6 +5,7 @@
  */
 
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -31,19 +32,34 @@ public:
 */
 
 class Solution {
-	void dfs(Node* node, vector<int>& out) {
-		if(!node) return;
-		out.push_back(node->val);
+	// void dfs(Node* node, vector<int>& out) {
+	// 	if(!node) return;
+	// 	out.push_back(node->val);
 
-		for(int i = 0; i < node->children.size(); i++)
-			dfs(node->children[i], out);
+	// 	for(int i = 0; i < node->children.size(); i++)
+	// 		dfs(node->children[i], out);
 
-	}
+	// }
 
 public:
 	vector<int> preorder(Node* root) {
+		if(!root) return {};
+
 		vector<int> out;
-		dfs(root, out);
+
+		stack<Node*> s;
+		s.push(root);
+
+		while(!s.empty()) {
+			Node* node = s.top();
+			s.pop();
+			out.push_back(node->val);
+
+			for(int i = node->children.size() - 1; i >= 0; i--)
+				if(node->children[i])
+					s.push(node->children[i]);
+
+		}
 		return out;
 	}
 };
