@@ -19,23 +19,29 @@ public:
 		int n = s.length();
 		int i = 0;
 
-		int indicator = 1;
-		int64_t out = 0;
+		int sign = 1;
+		// we use a 64bit int to check for overflows
+		// comparing it with the max capacity of an int32
+		int64_t result = 0;
 
+		// we skip the leading spaces
+		while(s[i] == ' ') i++;
 
-		while(i < n && s[i] == ' ') i++;
-
+		// check for a '-' or '+'
 		if(s[i] == '-' || s[i] == '+')
-			indicator = (s[i++] == '-') ? -1 : 1;
+			sign = (s[i++] == '-') ? -1 : 1;
 
 
+		// iterate through all consequent digits
+		// and stop at first non digit or end of string ('\0') 
 		while('0' <= s[i] && s[i] <= '9') {
-			out = out * 10 + (s[i++] - '0');
-			if(out * indicator >= INT_MAX) return INT_MAX;
-			if(out * indicator <= INT_MIN) return INT_MIN;
+			result = result * 10 + (s[i++] - '0');
+			if(result * sign >= INT_MAX) return INT_MAX;
+			if(result * sign <= INT_MIN) return INT_MIN;
 		}
 
-		return indicator * out;
+		// at this point we know the result will fit in a int32  
+		return result * sign;
 
 	}
 };
