@@ -44,19 +44,20 @@ using namespace std;
 
 
 class Solution {
-	bool dfs(TreeNode* node, int64_t lim_left, int64_t lim_right) {
+	bool dfs(TreeNode* node, int* lim_left, int* lim_right) {
 		if(!node) return true;
 
-		if(!(lim_left <= node->val && node->val <= lim_right))
+		if((lim_left && *lim_left >= node->val) // || 
+			|| (lim_right && node->val >= *lim_right))
 			return false;
 
-		return dfs(node->left, lim_left, min((int64_t)node->val, lim_right) - 1) // &&
-			&& dfs(node->right, max((int64_t)node->val, lim_left) + 1, lim_right);
+		return dfs(node->left, lim_left, &node->val) // &&
+			&& dfs(node->right, &node->val, lim_right);
 	}
 public:
 	bool isValidBST(TreeNode* node) {
 
-		return dfs(node, INT32_MIN, INT32_MAX);
+		return dfs(node, nullptr, nullptr);
 	}
 };
 // @lc code=end
