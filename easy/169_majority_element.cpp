@@ -9,20 +9,26 @@
 
 using namespace std;
 
+// https://www.wikiwand.com/en/Boyer%E2%80%93Moore_majority_vote_algorithm
+
 // @lc code=start
 class Solution {
 public:
 	int majorityElement(vector<int>& nums) {
-		int n = nums.size() / 2;
-		unordered_map<int, int> occurrences;
+		int count = 0;
+		int major = nums[0];
 
 		for(int num : nums) {
-			if(++occurrences[num] > n)
-				return num;
+			if(count == 0) {
+				major = num;
+				count++;
+			}
+			else if(num == major)
+				count++;
+			else count--;
 		}
 
-		// just to compile
-		return nums[0];
+		return major;
 	}
 };
 // @lc code=end
