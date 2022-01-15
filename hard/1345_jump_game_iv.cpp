@@ -4,6 +4,7 @@
  * [1345] Jump Game IV
  */
 #include <vector>
+#include <iostream>
 #include <queue>
 #include <unordered_map>
 
@@ -39,6 +40,7 @@ public:
 				if(i == n - 1) return jumps; // Reached to last index
 
 				vector<int>& next = indicesOfValue[arr[i]];
+				// cout << arr[i] << " " << next.size() << endl;
 				next.push_back(i - 1);
 				next.push_back(i + 1);
 
@@ -57,4 +59,12 @@ public:
 	}
 };
 // @lc code=end
+
+
+int main(int argc, char const* argv[])
+{
+	vector<int> nums{ 7, 7, 7, 7, 7, 1, 2, 3 };
+	cout << Solution().minJumps(nums);
+	return 0;
+}
 
