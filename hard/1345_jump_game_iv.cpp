@@ -4,56 +4,55 @@
  * [1345] Jump Game IV
  */
 #include <vector>
+#include <queue>
 #include <unordered_map>
 
 using namespace std;
+
+
+// https://leetcode.com/problems/jump-game-iv/discuss/502699/JavaC%2B%2B-BFS-Solution-Clean-code-O(N)
 
 // @lc code=start
 class Solution {
 public:
 	int minJumps(vector<int>& arr) {
 		int n = arr.size();
-		unordered_map<int, int> hash;
-		vector<int> dp(n, INT_MAX);
-		dp[0] = 0;
-		hash[arr[0]] = 0;
+		unordered_map<int, vector<int>> indicesOfValue;
 
-		for(int i = 1; i < n; i++) {
-			dp[i] = dp[i - 1] + 1;
-			if(hash.find(arr[i]) != hash.end()) {
-				dp[i] = min(dp[i], hash[arr[i]] + 1);
-				hash[arr[i]] = min(hash[arr[i]], dp[i]);
-			}
-			else
-				hash[arr[i]] = dp[i];
+		vector<bool> visited(n); visited[0] = true;
 
+		queue<int> q; q.push(0);
+
+		// we store indices of same values together to
+		// facilitate moving through them
+		for(int i = 0; i < n; i++) {
+			indicesOfValue[arr[i]].push_back(i);
 		}
 
-		bool changed = false;
-		do {
-			for(int i = n - 2; i >= 0; --i) {
-				if(min(dp[i + 1], hash[arr[i]]) + 1 < dp[i]) {
-					changed = true;
-					dp[i] = min(dp[i + 1], hash[arr[i]]) + 1;
-					hash[arr[i]] = min(hash[arr[i]], dp[i]);
+		int jumps = 0;
+
+		while(!q.empty()) {
+
+			for(int size = q.size(); size > 0; --size) {
+				int i = q.front(); q.pop();
+
+				if(i == n - 1) return jumps; // Reached to last index
+
+				vector<int>& next = indicesOfValue[arr[i]];
+				next.push_back(i - 1);
+				next.push_back(i + 1);
+
+				for(int j : next) {
+					if(j >= 0 && j < n && !visited[j]) {
+						visited[j] = true;
+						q.push(j);
+					}
 				}
+				next.clear(); // avoid later lookup indicesOfValue arr[i]
 			}
-
-			if(!changed) break;
-			changed = false;
-
-			for(int i = 1; i < n; i++) {
-				if(min(dp[i - 1], hash[arr[i]]) + 1 < dp[i]) {
-					changed = true;
-					dp[i] = min(dp[i - 1], hash[arr[i]]) + 1;
-					hash[arr[i]] = min(hash[arr[i]], dp[i]);
-				}
-			}
-
-		} while(changed);
-
-
-		return dp[n - 1];
+			jumps++;
+		}
+		return 0;
 
 	}
 };
