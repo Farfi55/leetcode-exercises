@@ -15,23 +15,28 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
-	int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
-		const size_t m = obstacleGrid.size();
-		const size_t n = obstacleGrid[0].size();
+	int uniquePathsWithObstacles(vector<vector<int>>& grid) {
+		const size_t m = grid.size();
+		const size_t n = grid[0].size();
 
-		vector<int> dp(n, 0);
-		dp[0] = 1;
+		if(grid[0][0] || grid[m - 1][n - 1])
+			return 0;
 
-		for(size_t i = 0; i < m; i++) {
-			dp[0] = min(dp[0], 1 - obstacleGrid[i][0]);
+
+		grid[0][0] = 1;
+
+		for(size_t j = 1; j < n; j++)
+			grid[0][j] = grid[0][j] ? 0 : grid[0][j - 1];
+
+		for(size_t i = 1; i < m; i++) {
+			grid[i][0] = grid[i][0] ? 0 : grid[i - 1][0];
+
 			for(size_t j = 1; j < n; j++) {
-				if(!obstacleGrid[i][j])
-					dp[j] += dp[j - 1];
-				else dp[j] = 0;
+				grid[i][j] = grid[i][j] ? 0 : grid[i - 1][j] + grid[i][j - 1];
 			}
 		}
 
-		return dp[n - 1];
+		return grid[m - 1][n - 1];
 	}
 };
 // @lc code=end
