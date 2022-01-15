@@ -29,28 +29,29 @@ public:
 
 		}
 
-		for(int j = 0; j < 3; j++) {
-
+		bool changed = false;
+		do {
 			for(int i = n - 2; i >= 0; --i) {
-				dp[i] = min(dp[i], dp[i + 1] + 1);
-				if(hash.find(arr[i]) != hash.end()) {
-					dp[i] = min(dp[i], hash[arr[i]] + 1);
+				if(min(dp[i + 1], hash[arr[i]]) + 1 < dp[i]) {
+					changed = true;
+					dp[i] = min(dp[i + 1], hash[arr[i]]) + 1;
 					hash[arr[i]] = min(hash[arr[i]], dp[i]);
 				}
-				else
-					hash[arr[i]] = dp[i];
 			}
 
+			if(!changed) break;
+			changed = false;
 
 			for(int i = 1; i < n; i++) {
-				dp[i] = min(dp[i], dp[i - 1] + 1);
-				if(hash.find(arr[i]) != hash.end()) {
-					dp[i] = min(dp[i], hash[arr[i]] + 1);
+				if(min(dp[i - 1], hash[arr[i]]) + 1 < dp[i]) {
+					changed = true;
+					dp[i] = min(dp[i - 1], hash[arr[i]]) + 1;
 					hash[arr[i]] = min(hash[arr[i]], dp[i]);
 				}
-
 			}
-		}
+
+		} while(changed);
+
 
 		return dp[n - 1];
 
