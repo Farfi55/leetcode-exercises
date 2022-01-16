@@ -15,37 +15,29 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
-	int maximalSquare(vector<vector<char>>& matrix) {
-		int m = matrix.size();
-		int n = matrix[0].size();
+	int maximalSquare(vector<vector<char>>& M) {
+		int m = M.size();
+		int n = M[0].size();
 
 		int max_sqr = 0;
-		for(int i = 0; i < m && max_sqr == 0; i++)
-			for(int j = 0; j < n && max_sqr == 0; j++)
-				if(matrix[i][j] - '0')
-					max_sqr = 1;
 
-
-
-		bool found_new_max = true;
-		for(int sqr_size = 2; sqr_size <= min(n, m) && found_new_max; sqr_size++) {
-			found_new_max = false;
-			for(int i = 0; i <= m - sqr_size; i++) {
-				for(int j = 0; j <= n - sqr_size; j++)
-					if(matrix[i][j] - '0' == sqr_size - 1 // && 
-						&& matrix[i + 1][j] - '0' == sqr_size - 1 // &&
-						&& matrix[i][j + 1] - '0' == sqr_size - 1 // &&
-						&& matrix[i + 1][j + 1] - '0' == sqr_size - 1) {
-						matrix[i][j] = sqr_size + '0';
-						max_sqr = sqr_size;
-						found_new_max = true;
-					}
-
+		vector<vector<int>> dp(m, vector<int>(n, 0));
+		for(int i = 0; i < m; i++)
+			for(int j = 0; j < n; j++) {
+				dp[i][j] = M[i][j] - '0';
+				max_sqr = max(max_sqr, dp[i][j]);
 			}
 
+		for(int i = m - 2; i >= 0; i--) {
+			for(int j = n - 2; j >= 0; j--) {
+				if(dp[i][j])
+					dp[i][j] = 1 + min(dp[i + 1][j + 1], min(dp[i][j + 1], dp[i + 1][j]));
+				max_sqr = max(max_sqr, dp[i][j]);
+			}
 		}
 		return max_sqr * max_sqr;
 	}
+
 };
 // @lc code=end
 
