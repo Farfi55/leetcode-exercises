@@ -1,6 +1,7 @@
 // @before-stub-for-debug-begin
 #include <vector>
 #include <set>
+#include <algorithm>
 #include <string>
 // #include "commoncppproblem56.h"
 
@@ -44,52 +45,40 @@ out {{0,5}, {7, 14}}
 
 
 
+
 // @lc code=start
+
+bool interval_sort(const pair<int, int8_t>& lhs, const pair<int, int8_t>& rhs) {
+	return lhs.first < rhs.first || (lhs.first == rhs.first && lhs.second > rhs.second);
+}
+
+
 class Solution {
 public:
 	vector<vector<int>> merge(vector<vector<int>>& intervals) {
-		set<int> starts;
-		set<int> ends;
+		int n = intervals.size();
+		vector<pair<int, int8_t>> keyframes; keyframes.reserve(2 * n);
 
 		for(auto& interval : intervals) {
-			starts.insert(interval[0]);
-			ends.insert(interval[1]);
+			keyframes.push_back(make_pair(interval[0], 1));
+			keyframes.push_back(make_pair(interval[1], -1));
 		}
 
-		vector<vector<int>> out;
-		auto next_start = starts.begin();
-		auto next_end = ends.begin();
+		sort(keyframes.begin(), keyframes.end(), interval_sort);
 
-		while(next_start != starts.end() && next_end != ends.end()) {
-			out.push_back({ *next_start, 0 });
+		vector<vector<int>> out;
+
+		int i = 0;
+		while(i < n * 2) {
+			int start = keyframes[i].first;
 			int diff = 0;
 
 			do {
-				if(*next_start <= *next_end) {
-					next_start++;
-					diff++;
-					if(next_start == starts.end()) {
-						next_end = prev(ends.end());
-						break;
-					}
-				}
-				else { // if(*next_start > *next_end) {
-					if(--diff > 0)
-						next_end++;
-				}
-				// else {
+				diff += keyframes[i++].second;
+			} while(diff);
 
-				// 	next_start++;
-				// 	if(diff > 0)
-				// 		next_end++;
-				// }
-
-			} while(diff > 0);
-
-			out.back()[1] = *next_end;
-			next_end++;
+			out.push_back({ start, keyframes[i - 1].first });
 		}
-
 		return out;
 
 	}
