@@ -1,5 +1,6 @@
 // @before-stub-for-debug-begin
 #include <vector>
+#include <forward_list>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -14,53 +15,39 @@ using namespace std;
 // @lc code=start
 class MyHashMap {
 
-	const static int N_BUCKETS = 256;
-	// const int n_buckets;
+	const static int N_BUCKETS = 10007; // is prime
 
-	int hash(int key) {
-		key = ((key) ^ (key >> 1)) % N_BUCKETS;
-		return key;
-	}
-
-	vector<vector<pair<int, int>>> buckets;
+	vector<forward_list<pair<int, int>>> map;
 
 public:
-	MyHashMap() : buckets(N_BUCKETS) {}
+	MyHashMap() : map(N_BUCKETS) {}
 	// MyHashMap(int n_buckets_) : n_buckets(n_buckets_), buckets(n_buckets_) {}
 
 	void put(int key, int value) {
-
-		vector<pair<int, int>>& bucket = buckets[hash(key)];
-		for(int i = 0; i < bucket.size(); i++) {
-			if(bucket[i].first == key) {
-				bucket[i].second = value;
+		auto& list = map[key % N_BUCKETS];
+		for(auto it = list.begin(); it != list.end(); it++) {
+			if(it->first == key) {
+				it->second = value;
 				return;
 			}
 		}
-		bucket.push_back(make_pair(key, value));
+		list.emplace_front(key, value);
 	}
 
 	int get(int key) {
-		vector<pair<int, int>>& bucket = buckets[hash(key)];
+		auto& list = map[key % N_BUCKETS];
 
-		for(int i = 0; i < bucket.size(); i++) {
-			if(bucket[i].first == key) {
-				return bucket[i].second;
-			}
-		}
+		for(auto it = list.begin(); it != list.end(); it++)
+			if(it->first == key)
+				return it->second;
+
 
 		return -1;
 	}
 
 	void remove(int key) {
-		vector<pair<int, int>>& bucket = buckets[hash(key)];
-
-		for(auto it = bucket.begin(); it != bucket.end(); it++) {
-			if(it->first == key) {
-				bucket.erase(it);
-				return;
-			}
-		}
+		auto& list = map[key % N_BUCKETS];
+		list.remove_if([key](auto n) { return n.first == key; });
 	}
 };
 
