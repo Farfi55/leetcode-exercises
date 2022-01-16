@@ -48,36 +48,29 @@ out {{0,5}, {7, 14}}
 
 // @lc code=start
 
-bool interval_sort(const pair<int, int8_t>& lhs, const pair<int, int8_t>& rhs) {
-	return lhs.first < rhs.first || (lhs.first == rhs.first && lhs.second > rhs.second);
-}
+// bool interval_sort(const pair<int, int8_t>& lhs, const pair<int, int8_t>& rhs) {
+// 	return lhs.first < rhs.first || (lhs.first == rhs.first && lhs.second > rhs.second);
+// }
 
 
 class Solution {
 public:
 	vector<vector<int>> merge(vector<vector<int>>& intervals) {
 		int n = intervals.size();
-		vector<pair<int, int8_t>> keyframes; keyframes.reserve(2 * n);
 
-		for(auto& interval : intervals) {
-			keyframes.push_back(make_pair(interval[0], 1));
-			keyframes.push_back(make_pair(interval[1], -1));
-		}
+		if(n == 0) return {};
 
-		sort(keyframes.begin(), keyframes.end(), interval_sort);
+		sort(intervals.begin(), intervals.end());
 
-		vector<vector<int>> out;
+		vector<vector<int>> out{ intervals[0] };
+		for(int i = 1; i < n; i++) {
 
-		int i = 0;
-		while(i < n * 2) {
-			int start = keyframes[i].first;
-			int diff = 0;
-
-			do {
-				diff += keyframes[i++].second;
-			} while(diff);
-
-			out.push_back({ start, keyframes[i - 1].first });
+			if(out.back()[1] >= intervals[i][0]) {
+				out.back()[1] = max(out.back()[1], intervals[i][1]);
+			}
+			else {
+				out.push_back(intervals[i]);
+			}
 		}
 		return out;
 
