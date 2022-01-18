@@ -14,11 +14,7 @@ using namespace std;
 
 // @lc code=start
 class Solution {
-	bool bin_search(vector<int>& arr, int target) {
-		int i = 0;
-		int j = arr.size() - 1;
-
-
+	bool bin_search(vector<int>& arr, int target, int i, int j) {
 		while(i <= j) {
 			int mid = (i + j) / 2;
 
@@ -29,17 +25,22 @@ class Solution {
 		return false;
 	}
 public:
-	bool searchMatrix(vector<vector<int>>& matrix, int target) {
-		int m = matrix.size();
-		int n = matrix[0].size();
+	bool searchMatrix(vector<vector<int>>& M, int target) {
+		int m = M.size();
+		int n = M[0].size();
+
+
+		int left = n - 1;
+
+		while(left >= 0 && M[0][left] > target)
+			--left;
+
 		for(int i = 0; i < m; i++) {
-			if(matrix[i][0] > target)
+			if(M[i][0] > target)
 				return false;
 
-			if(target <= matrix[i][n - 1] &&
-				bin_search(matrix[i], target))
+			if(bin_search(M[i], target, 0, left))
 				return true;
-
 		}
 		return false;
 	}
