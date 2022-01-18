@@ -17,6 +17,8 @@ class Solution {
 	bool bin_search(vector<int>& arr, int target) {
 		int i = 0;
 		int j = arr.size() - 1;
+
+
 		while(i <= j) {
 			int mid = (i + j) / 2;
 
@@ -28,9 +30,14 @@ class Solution {
 	}
 public:
 	bool searchMatrix(vector<vector<int>>& matrix, int target) {
+		int m = matrix.size();
+		int n = matrix[0].size();
+		for(int i = 0; i < m; i++) {
+			if(matrix[i][0] > target)
+				return false;
 
-		for(int i = 0; i < matrix.size(); i++) {
-			if(bin_search(matrix[i], target))
+			if(target <= matrix[i][n - 1] &&
+				bin_search(matrix[i], target))
 				return true;
 
 		}
