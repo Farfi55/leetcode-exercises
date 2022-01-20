@@ -14,28 +14,19 @@ using namespace std;
 class Solution {
 public:
 	string addStrings(string num1, string num2) {
-		int n1 = num1.length();
-		int n2 = num2.length();
-		if(n1 == 0) return num2;
-		if(n2 == 0) return num1;
-
-		string out;
+		int i = num1.size() - 1;
+		int j = num2.size() - 1;
 		int carry = 0;
-		for(int i = 0; i <= max(n1, n2); i++) {
 
-			char add1 = i < n1 ? num1[n1 - 1 - i] : '0';
-			char add2 = i < n2 ? num2[n2 - 1 - i] : '0';
-			char num = (add1 + add2 + carry) - '0';
-			if(num > '9') {
-				carry = 1;
-				num -= 10;
-			}
-			else carry = 0;
-			if(i != max(n1, n2) || num != '0')
-				out = num + out;
+		string res = "";
+
+		while(i >= 0 || j >= 0) {
+			if(i >= 0) carry += num1[i--] - '0';
+			if(j >= 0) carry += num2[j--] - '0';
+			res = to_string(carry % 10) + res;
+			carry /= 10;
 		}
-		return out;
-
+		return carry ? "1" + res : res;
 	}
 };
 // @lc code=end
