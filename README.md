@@ -1,7 +1,12 @@
 # Leetcode exercises
 
-This is a repo of all my **leetcode problems**
+This is a collection of all my **leetcode solutions**
 
-Most Files cointain finished working solutions, if it isn't an accepted solution then i probably wrote that on the last commit of that file.
+if you want to try for yourself https://leetcode.com/problemset/all/
 
-**Every commit** is a somewhat **different implementation** of that problem so you can see the process behind my resolution.
+Most Files contain finished working solutions, if it isn't an accepted solution then I probably wrote that on the last commit of that file.
+
+**Every commit** is a somewhat **different implementation** of that problem so you can see the mental process behind my final solution.
+
+I've used the [vs code leetcode](https://marketplace.visualstudio.com/items?itemName=LeetCode.vscode-leetcode) extension
+and [vscode debug leetcode](https://github.com/wangtao0101/vscode-debug-leetcode) to debug my solutions
