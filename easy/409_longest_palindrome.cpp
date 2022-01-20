@@ -19,19 +19,14 @@ public:
 		int odd = 0;
 		for(const char& c : s) {
 			count[c - 'A']++;
-		}
-
-
-		for(int i = 0; i < 58; i++) {
-			if(count[i] % 2) {
-				odd++;
-				lenght += count[i] - 1;
+			if(count[c - 'A'] & 1) odd++;
+			else {
+				lenght += 2;
+				odd--;
 			}
-			else lenght += count[i];
 		}
-		if(odd > 0)
-			lenght += 1;
-		return lenght;
+
+		return odd > 0 ? lenght + 1 : lenght;
 	}
 };
 // @lc code=end
