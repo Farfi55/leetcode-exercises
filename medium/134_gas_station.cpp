@@ -18,22 +18,20 @@ public:
 	int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
 		const int n = gas.size();
 
+		int start = 0;
+		int fuel = 0;
+		int total = 0;
+
 		for(int i = 0; i < n; i++) {
-			int fuel = 0;
-			bool completed = true;
-			for(int j = i; j < n + i; j++) {
-				fuel += gas[j % n] - cost[j % n];
-				if(fuel < 0) {
-					completed = false;
-					break;
-				}
+			fuel += gas[i] - cost[i];
+			if(fuel < 0) {
+				start = i + 1;
+				total += fuel;
+				fuel = 0;
 			}
-
-			if(completed)
-				return i;
 		}
-		return -1;
 
+		return (total + fuel < 0) ? -1 : start;
 	}
 };
 // @lc code=end
