@@ -17,31 +17,37 @@
  */
 class Solution {
 public:
-	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-		if(!l1 && !l2) return nullptr;
-
-		ListNode* out_head = l1;
-		int carry = 0;
-
-		while(true) {
-			if(l2) {
-				carry += l2->val;
-				l2 = l2->next;
-			}
-
-			carry += l1->val;
-			l1->val = (carry % 10);
-			carry /= 10;
-			if(carry || l2) {
-				if(!l1->next)
-					l1->next = new ListNode();
-				l1 = l1->next;
-			}
+	void addRecursive(ListNode* node, int carry) {
+		carry += node->val;
+		node->val = carry % 10;
+		carry /= 10;
+		if(carry) {
+			if(!node->next)
+				node->next = new ListNode(carry);
 			else
-				break;
+				addRecursive(node->next, carry);
+		}
+	}
+
+	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2, int carry) {
+		if(!l1 && !l2) return nullptr;
+		else if(!l1) {
+			addRecursive(l2, carry);
+			return l2;
+		}
+		else if(!l2) {
+			addRecursive(l1, carry);
+			return l1;
 		}
 
-		return out_head;
+		carry += l1->val + l2->val;
+		auto out = new ListNode(carry % 10);
+		out->next = addTwoNumbers(l1->next, l2->next, carry / 10);
+		return out;
+	}
+
+	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+		return addTwoNumbers(l1, l2, 0);
 	}
 };
 // @lc code=end
