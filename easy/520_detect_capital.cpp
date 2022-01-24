@@ -12,16 +12,16 @@ using namespace std;
 class Solution {
 public:
 	bool detectCapitalUse(string word) {
-		uint8_t caps_letters = 0;
-		uint8_t n_letters = word.length();
+		uint8_t upper_letters = 0;
+		uint8_t total_letters = word.length();
 
-		for(char& c : word)
-			if(c <= 'Z')
-				caps_letters++;
+		for(auto& c : word)
+			if(isupper(c))
+				upper_letters++;
 
-		return (caps_letters == 0 // ||
-			|| (caps_letters == n_letters) // ||
-			|| (caps_letters == 1 && word[0] <= 'Z'));
+		return (upper_letters == 0 // ||
+			|| (upper_letters == total_letters) // ||
+			|| (upper_letters == 1 && isupper(word[0])));
 
 	}
 };
