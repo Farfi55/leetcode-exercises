@@ -17,37 +17,16 @@
  */
 class Solution {
 public:
-	void addRecursive(ListNode* node, int carry) {
-		carry += node->val;
-		node->val = carry % 10;
-		carry /= 10;
-		if(carry) {
-			if(!node->next)
-				node->next = new ListNode(carry);
-			else
-				addRecursive(node->next, carry);
-		}
-	}
-
-	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2, int carry) {
-		if(!l1 && !l2) return nullptr;
-		else if(!l1) {
-			addRecursive(l2, carry);
-			return l2;
-		}
-		else if(!l2) {
-			addRecursive(l1, carry);
-			return l1;
-		}
-
-		carry += l1->val + l2->val;
-		auto out = new ListNode(carry % 10);
-		out->next = addTwoNumbers(l1->next, l2->next, carry / 10);
-		return out;
-	}
-
 	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-		return addTwoNumbers(l1, l2, 0);
+		if(!l1 && !l2) return nullptr;
+		else if(!l1) return l2;
+		else if(!l2) return l1;
+
+		int sum = l1->val + l2->val;
+		auto out = new ListNode(sum % 10);
+		out->next = addTwoNumbers(l1->next, l2->next);
+		if(sum >= 10) out->next = addTwoNumbers(out->next, new ListNode(1));
+		return out;
 	}
 };
 // @lc code=end
