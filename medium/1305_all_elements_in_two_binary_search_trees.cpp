@@ -4,6 +4,7 @@
  * [1305] All Elements in Two Binary Search Trees
  */
 
+#include <array>
 #include <vector>
 #include <algorithm>
 
@@ -22,19 +23,28 @@ using namespace std;
  * };
  */
 class Solution {
-	void dfs(TreeNode* node, vector<int>& nums) {
+	void dfs(TreeNode* node, array<int, 5001>& nums) {
 		if(!node) return;
 
 		dfs(node->left, nums);
-		nums.push_back(node->val);
+		nums[node->val]++;
 		dfs(node->right, nums);
 	}
 public:
 	vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {
-		vector<int> out;
-		dfs(root1, out);
-		dfs(root2, out);
-		sort(out.begin(), out.end());
+		array<int, 5001> nums;
+		nums.fill(0);
+
+		dfs(root1, nums);
+		dfs(root2, nums);
+
+		vector<int>out;
+		for(int i = 0; i <= 5000; i++) {
+			while(nums[i]--)
+				out.push_back(i);
+		}
+
+
 		return out;
 	}
 };
