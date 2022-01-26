@@ -4,8 +4,8 @@
  * [1305] All Elements in Two Binary Search Trees
  */
 
-#include <array>
 #include <vector>
+#include <stack>
 #include <algorithm>
 
 using namespace std;
@@ -23,29 +23,33 @@ using namespace std;
  * };
  */
 class Solution {
-	void dfs(TreeNode* node, array<int, 5001>& nums) {
-		if(!node) return;
-
-		dfs(node->left, nums);
-		nums[node->val]++;
-		dfs(node->right, nums);
-	}
 public:
-	vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {
-		array<int, 5001> nums;
-		nums.fill(0);
-
-		dfs(root1, nums);
-		dfs(root2, nums);
-
-		vector<int>out;
-		for(int i = 0; i <= 5000; i++) {
-			while(nums[i]--)
-				out.push_back(i);
+	void pushLeft(stack<TreeNode*>& s, TreeNode* n) {
+		while(n != nullptr) {
+			s.push(n);
+			n = n->left;
 		}
+	}
 
+	vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {
+		vector<int> res;
+		stack<TreeNode*> s1, s2;
+		pushLeft(s1, root1);
+		pushLeft(s2, root2);
+		while(!s1.empty() || !s2.empty()) {
+			stack<TreeNode*>* s;
 
-		return out;
+			if(s1.empty()) s = &s2;
+			else if(s2.empty()) s = &s1;
+			else {
+				s = (s1.top()->val < s2.top()->val) ? &s1 : &s2;
+			}
+
+			TreeNode* n = s->top(); s->pop();
+			res.push_back(n->val);
+			pushLeft(*s, n->right);
+		}
+		return res;
 	}
 };
 // @lc code=end
