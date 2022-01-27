@@ -1,11 +1,3 @@
-// @before-stub-for-debug-begin
-#include <vector>
-#include <string>
-#include "commoncppproblem25.h"
-
-using namespace std;
-// @before-stub-for-debug-end
-
 /*
  * @lc app=leetcode id=25 lang=cpp
  *
@@ -40,33 +32,33 @@ using namespace std;
 class Solution {
 public:
 	ListNode* reverseKGroup(ListNode* head, int k) {
-		ListNode* sentinel = new ListNode(0, head);
+		if(head == nullptr || k == 1) return head;
 
-		ListNode* curr = sentinel;
+		ListNode sentinel = ListNode(0, head);
 
-		while(1) {
-			ListNode* idk = curr->next;
-			stack<ListNode*> s;
+		ListNode* curr = &sentinel;
+		ListNode* next;
+		ListNode* prev = &sentinel;
 
-			for(int i = 0; i < k && idk != nullptr; i++) {
-				s.push(idk);
-				idk = idk->next;
+		int remaining_nodes = 0;
+		while(curr = curr->next)
+			remaining_nodes++;
+
+		while(remaining_nodes >= k) {
+			curr = prev->next;
+			next = curr->next;
+			for(int i = 1; i < k; ++i) {
+				curr->next = next->next;
+				next->next = prev->next;
+				prev->next = next;
+				next = curr->next;
 			}
 
-			if(s.size() != k) break;
-
-			while(!s.empty()) {
-				curr->next = s.top();
-				s.pop();
-				curr = curr->next;
-			}
-			curr->next = idk;
-
+			prev = curr;
+			remaining_nodes -= k;
 		}
 
-		auto tmp = sentinel->next;
-		delete sentinel;
-		return tmp;
+		return sentinel.next;
 	}
 };
 // @lc code=end
