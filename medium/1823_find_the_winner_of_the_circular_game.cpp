@@ -10,29 +10,12 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
+	// https://www.wikiwand.com/en/Josephus_problem
 	int findTheWinner(const int n, int k) {
-		if(k == 1) return n;
-
-		vector<bool> playing(n, true);
-
-		int i = k - 1;
-		playing[i] = false;
-		int n_playing = n - 1;
-
-		while(n_playing > 1) {
-			for(int j = 0; j < k;) {
-				if(playing[(++i) % n]) j++;
-			}
-			playing[i = (i % n)] = false;
-			n_playing--;
-		}
-
-		for(i = 0; i < n; i++)
-			if(playing[i])
-				return i + 1;
-
-
-		return -1;
+		int res = 0;
+		for(int i = 1; i <= n; ++i)
+			res = (res + k) % i;
+		return res + 1;
 	}
 };
 // @lc code=end
