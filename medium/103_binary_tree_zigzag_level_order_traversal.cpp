@@ -25,34 +25,35 @@ public:
 		vector<vector<int>> nodes;
 
 		queue<TreeNode*> q;
-		queue<int> q_level;
 
 		q.push(root);
-		q_level.push(0);
 
+		bool left_to_right = true;
 
 		while(!q.empty()) {
-			int level = q_level.front(); q_level.pop();
-			auto node = q.front(); q.pop();
 
-			if(nodes.size() == level)
-				nodes.push_back({});
+			int sz = q.size();
+			vector<int> curr(sz);
 
-			nodes[level].push_back(node->val);
+			for(int i = 0; i < sz; i++) {
+				auto node = q.front(); q.pop();
 
-			if(node->left) {
-				q.push(node->left);
-				q_level.push(level + 1);
+				if(left_to_right)
+					curr[i] = node->val;
+				else curr[sz - 1 - i] = node->val;
+
+				if(node->left)
+					q.push(node->left);
+				if(node->right)
+					q.push(node->right);
+
 			}
-			if(node->right) {
-				q.push(node->right);
-				q_level.push(level + 1);
-			}
+
+			nodes.push_back(curr);
+
+			left_to_right = !left_to_right;
 		}
 
-
-		for(int i = 1; i < nodes.size(); i += 2)
-			reverse(nodes[i].begin(), nodes[i].end());
 
 		return nodes;
 	}
