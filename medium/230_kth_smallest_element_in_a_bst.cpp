@@ -17,22 +17,32 @@
  * };
  */
 class Solution {
-	vector<int> nums;
-
-	void dfs(TreeNode* node) {
-		if(!node) return;
-
-		nums.push_back(node->val);
-		dfs(node->left);
-		dfs(node->right);
-	}
 
 public:
 	int kthSmallest(TreeNode* root, int k) {
-		dfs(root);
+		stack<TreeNode*> st;
 
-		sort(nums.begin(), nums.end());
-		return nums[k - 1];
+		while(root != nullptr) {
+			st.push(root);
+			root = root.left;
+		}
+
+		while(k != 0) {
+			TreeNode node = st.top(); st.pop();
+			k--;
+			if(k == 0)
+				return node.val;
+
+
+			TreeNode* right = node->right;
+
+			while(right != null) {
+				st.push(right);
+				right = right.left;
+			}
+		}
+
+		return -1;
 	}
 };
 // @lc code=end
