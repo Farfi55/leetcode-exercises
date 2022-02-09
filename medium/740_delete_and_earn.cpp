@@ -28,23 +28,26 @@ public:
 			cnt[nums[i]] += nums[i];
 		}
 
-		vector<int> dp(MAX_VAL + 1, 0);
-		dp[1] = cnt[1]; // dp[1] since nums[i] >= 1
-		dp[2] = max(cnt[1], cnt[2]);
+		int curr = 0;// dp[1] since nums[i] >= 1
+		int prev = 0;
 
-		for(int i = 3; i <= MAX_VAL; i++) {
-			dp[i] = max(dp[i - 1], cnt[i] + dp[i - 2]);
+
+
+		for(int i = 0; i <= MAX_VAL; i++) {
+			int tmp = max(curr, cnt[i] + prev);
+			prev = curr;
+			curr = tmp;
 		}
 
-		return dp[MAX_VAL];
+		return curr;
 	}
 };
 // @lc code=end
 
-int main(int argc, char const* argv[])
-{
-	vector<int> nums = { 1, 3, 3, 2, 5, 5, 4, 6, 2 };
-	Solution sol;
-	cout << sol.deleteAndEarn(nums);
-	return 0;
-}
+// int main(int argc, char const* argv[])
+// {
+// 	vector<int> nums = { 1, 3, 3, 2, 5, 5, 4, 6, 2 };
+// 	Solution sol;
+// 	cout << sol.deleteAndEarn(nums);
+// 	return 0;
+// }
