@@ -1,3 +1,11 @@
+
+#include <vector>
+#include <unordered_map>
+#include <stack>
+
+using std::vector;
+using std::unordered_map;
+
 /*
  * @lc app=leetcode id=496 lang=cpp
  *
@@ -12,22 +20,23 @@ public:
         const int n = nums1.size();
         const int m = nums2.size();
 
-        vector<int> ans(n, -1);
+        unordered_map<int, int> map;
+        std::stack<int> stack;
 
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                if(nums1[i] == nums2[j]) {
-                    for(; j < m; j++)
-                        if(nums2[j] > nums1[i]) {
-                            ans[i] = nums2[j];
-                            break;
-                        }
-                    break;
-                }
+
+        for(int x : nums2) {
+            while(!stack.empty() && stack.top() < x) {
+                map[stack.top()] = x;
+                stack.pop();
             }
+            stack.push(x);
         }
 
-        return ans;
+        for(int i = 0; i < n; i++) {
+            nums1[i] = map[nums1[i]] == 0 ? -1 : map[nums1[i]];
+        }
+
+        return nums1;
     }
 };
 // @lc code=end
