@@ -12,20 +12,18 @@ public:
 
         int n = s.length();
 
-        for(int i = 0; i < n; i++) {
-            if(s[i] == '1' || s[i] == '2') {
-                if(i >= n - 1 || s[i + 2] != '#')
-                    out += s[i] + 48;
-                else {
-                    out += s[i + 1] + 48 + (s[i] - '0') * 10;
-                    i += 2;
-                }
+        for(int i = n - 1; i >= 0; i--) {
+            if(s[i] == '#') {
+                char c = (s[i - 2] - '0') * 10 + s[i - 1] + 48;
+                out = c + out;
+                i -= 2;
             }
-            else
-                out += s[i] + 48;
+            else {
+                char c = s[i] + 48;
+                out = c + out;
+            }
         }
         return out;
-
     }
 };
 // @lc code=end
