@@ -13,11 +13,7 @@ public:
 
 
     bool addCar(int carType) {
-        if(spots[--carType] <= 0)
-            return false;
-
-        spots[carType]--;
-        return true;
+        return spots[carType - 1]-- > 0;
     }
 };
 
