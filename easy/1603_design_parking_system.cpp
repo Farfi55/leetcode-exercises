@@ -6,38 +6,18 @@
 
 // @lc code=start
 class ParkingSystem {
-    int big_spots;
-    int medium_spots;
-    int small_spots;
+    int spots[3] = {};
 public:
     ParkingSystem(int big, int medium, int small) :
-        big_spots(big), medium_spots(medium), small_spots(small) {}
+        spots{ big, medium, small } {}
 
 
     bool addCar(int carType) {
-        switch(carType) {
-            case 1:
-            if(big_spots > 0) {
-                big_spots--;
-                return true;
-            }
-            break;
-            case 2:
-            if(medium_spots > 0) {
-                medium_spots--;
-                return true;
-            }
-            break;
-            case 3:
-            if(small_spots > 0) {
-                small_spots--;
-                return true;
-            }
-            break;
-        }
+        if(spots[--carType] <= 0)
+            return false;
 
-        return false;
-
+        spots[carType]--;
+        return true;
     }
 };
 
