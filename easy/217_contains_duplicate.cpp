@@ -5,6 +5,7 @@
  */
 
 #include <vector>
+#include <unordered_set>
 #include <algorithm>
 
 using namespace std;
@@ -13,11 +14,12 @@ class Solution {
 public:
 	bool containsDuplicate(vector<int>& nums) {
 		int n = nums.size() - 1;
-		sort(nums.begin(), nums.end());	// O(nlog(n)) 
+		unordered_set<int> set;
 
-		for(int i = 0; i < n; i++)		// O(n)
-			if(nums[i] == nums[i + 1])
-				return true;
+		for(int x : nums) {
+			if(set.count(x)) return true;
+			else set.insert(x);
+		}
 
 		return false;
 	}
