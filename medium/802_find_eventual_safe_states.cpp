@@ -1,11 +1,3 @@
-// @before-stub-for-debug-begin
-#include <vector>
-#include <string>
-#include "commoncppproblem802.h"
-
-using namespace std;
-// @before-stub-for-debug-end
-
 #include <vector>
 
 using namespace std;
@@ -20,10 +12,11 @@ using namespace std;
 class Solution {
 
     bool dfs(int i, vector<vector<int>>& graph, vector<int>& isSafe, vector<bool>& vis) {
-        vis[i] = true;
         if(isSafe[i] == -1) {
+            vis[i] = true;
             for(int node : graph[i]) {
-                if(vis[node] || !dfs(node, graph, isSafe, vis))
+                if(isSafe[node] != 1 &&
+                    (vis[node] || !dfs(node, graph, isSafe, vis)))
                     return isSafe[i] = 0;
             }
             isSafe[i] = 1;
