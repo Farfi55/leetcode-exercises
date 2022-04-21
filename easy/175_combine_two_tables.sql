@@ -6,15 +6,14 @@
 
 -- @lc code=start
 -- Write your MySQL query statement below
+
+-- LEFT JOIN will ensure that all rows of the Person table are included in the answer
+-- regardless of whether the corrisponfing right table has or not any value
+
 SELECT firstName, lastName, city, state
-FROM Person, Address
-WHERE Person.personId = Address.personId
-UNION
-SELECT firstName, lastName, NULL, NULL 
 FROM Person
-WHERE Person.personId NOT IN (
-    SELECT personId
-    FROM Address   
-)
+LEFT JOIN Address 
+ON Person.personId = Address.personId
+
 -- @lc code=end
 
