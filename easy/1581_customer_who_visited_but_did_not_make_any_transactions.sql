@@ -10,10 +10,9 @@
 
 SELECT customer_id, COUNT(*) AS count_no_trans
 FROM Visits V
-WHERE visit_id NOT IN (
-    SELECT visit_id
-    FROM Transactions
-)
+LEFT JOIN Transactions T 
+ON T.visit_id = V.visit_id
+WHERE T.visit_id IS NULL
 GROUP BY customer_id
 
 -- @lc code=end
