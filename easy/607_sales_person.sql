@@ -7,13 +7,12 @@
 -- @lc code=start
 -- Write your MySQL query statement below
 
-SELECT name
-FROM SalesPerson
-WHERE sales_id NOT IN (
-    SELECT sales_id
-    FROM Orders O, Company C
-    WHERE C.name = "RED" AND O.com_id = C.com_id
-)
-
+SELECT S.name
+FROM Orders O 
+JOIN Company C
+ON O.com_id = C.com_id AND C.name = "RED"
+RIGHT JOIN SalesPerson S
+ON S.sales_id = O.sales_id
+WHERE O.sales_id IS NULL
 -- @lc code=end
 
